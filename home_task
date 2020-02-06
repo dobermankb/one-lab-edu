@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8" />
+    <title>article tag</title>
+    <style>
+        .book_review {
+            border: 1px solid black;
+            padding: 10px;
+            width: 400px;
+        }
+        .main_review {
+            border: 1px solid black;
+            padding-left: 10px;
+        }
+        .user_reviews {
+            border: 1px solid black;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<!-- HTML-элемент <article> представляет самостоятельную часть документа, страницы,
+     приложения или сайта, предназначенную для независимого распространения или повторного использования. 
+     Этот элемент может представлять статью на форуме, статью в журнале или газете, запись в блоге 
+     или какой-либо другой самостоятельный фрагмент содержимого. -->
+<body>
+    <article class="book_review">
+        <header>
+          <h2>Harry Potter</h2>
+        </header>
+        <section class="user_reviews">
+            <p>I really liked the book!</p>
+            <footer>
+              <p>Published 1st of May.</p>
+            </footer>
+          <article class="user_review">
+            <p>Book was okay, i expected more.</p>
+            <footer>
+              <p>Published 14th of September.</p>
+            </footer>
+          </article>
+        </section>
+      </article>
+    
+</body>
+</html>
