@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>lessson1</title>
+    <div>SVG example</div>
+    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+    </canvas>
+    <div id = "demo">
+        Geolocation example
+    </div>
+    <button onclick="getLocation()">Get Location</button>
+    <div>Sumbitting form and saving in localstorage</div>
+    <form>
+        <input id="firstName" placeholder="FirstName" />
+        <input id="lastName"  placeholder="Surname" />
+        <input id="email" placeholder="Email" />
+        <input id="salam"  placeholder="Salam?" />
+        <input id="a"  placeholder="a?" />
+        <input id="b"  placeholder="b?" />
+        <input id="c"  placeholder="c?" />
+        <button onclick="store()" type="button">submit</button>
+    </form>
+    <div>Animating with keyframes in CSS3</div>
+    <div id ="animation"></div>
+</head>
+<body>
+</body>
+</html>
+
+<style>
+    @keyframes example {
+        from {background-color: #ff0000;}
+        to {background-color: yellow;}
+    }
+    #animation{
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        animation-name: example;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+    }
+</style>
+
+<script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    ctx.beginPath();
+    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    ctx.stroke();
+
+    var x = document.getElementById("demo");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+            "<br>Longitude: " + position.coords.longitude;
+    }
+
+    function store(){
+        var fname= document.getElementById("firstName");
+        var lname= document.getElementById("lastName");
+
+        localStorage.setItem("fullName", lname.value + " " + fname.value);
+
+        var email= document.getElementById("email");
+        localStorage.setItem("email", email.value);
+
+        var salam= document.getElementById("salam");
+        localStorage.setItem("salam", salam.value);
+
+        var a= document.getElementById("a");
+        localStorage.setItem("a", a.value);
+
+        var b= document.getElementById("b");
+        localStorage.setItem("b", b.value);
+
+        var c= document.getElementById("c");
+        localStorage.setItem("c", c.value);
+
+        alert("Successfuly submitted");
+    }
+</script>
