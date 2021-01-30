@@ -1,0 +1,12 @@
+<br>
+<button mat-raised-button color="primary" type="button" [routerLink]="['/main/users-list']" >
+  Go back to the list of all users
+</button>
+<br><br>
+<p>user-edit works!</p>
+<p *ngIf="user$ | async; let user">Given role is <strong>{{user.role}}</strong></p>
+<p *ngIf="user$ | async; let user">UID is <strong>{{user.uid}}</strong></p>
+<p *ngIf="user$ | async; let user">Full name is <strong>{{user.fullName}}</strong></p>
+<p *ngIf="user$ | async; let user">Status is <strong>{{user.status}}</strong></p>
+<p *ngIf="user$ | async; let user">Shop name is <strong>{{user.shopName}}</strong></p>
+

@@ -1,12 +1,36 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MainComponent } from './pages/main/main.component';
+import { UsersListComponent } from './pages/users-list/users-list.component';
+import { MainGuard } from '@core/guard/main.guard';
+import { UserEditComponent } from './pages/user-edit/user-edit.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent
+    pathMatch: 'full',
+    redirectTo: 'users-list'
   },
+  {
+    path: '',
+    children: [
+      {
+        path: 'users-list',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin']
+        },
+        component: UsersListComponent
+      },
+      {
+        path: 'user-edit/:uid',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin']
+        },
+        component: UserEditComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({

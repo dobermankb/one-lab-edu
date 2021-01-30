@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { NotFoundPageComponent } from '@core/static/notfound-page/notfound-page.component';
-import { MustBeAuthGuard } from '@core/guard/must-be-auth.guard';
-
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
-const redirectLoggedInToMain = () => redirectLoggedInTo(['home']);
+import { MainGuard } from '@core/guard/main.guard';
 
 const routes: Routes = [
   {
@@ -14,16 +10,20 @@ const routes: Routes = [
     redirectTo: 'auth'
   },
   {
-    path: 'home',
-    canActivate: [AngularFireAuthGuard],
-    canLoad: [MustBeAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    path: 'main',
+    canActivate: [MainGuard],
+    canLoad: [MainGuard],
+    data: {
+      accessRoles: ['admin', 'seller']
+    },
     loadChildren: () => import('./feature/main/main.module').then(m => m.MainModule)
   },
   {
     path: 'auth',
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectLoggedInToMain },
+    canActivate: [MainGuard],
+    data: {
+      accessRoles: null
+    },
     loadChildren: () => import('./feature/auth/auth.module').then(m => m.AuthModule)
   },
   {

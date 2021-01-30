@@ -89,8 +89,8 @@ export class SessionUserEffect implements OnInitEffects {
 
   loginSessionUserComplete$ = createEffect(() =>
       this.actions$.pipe(
-        ofType(SessionUserActionType.LOGIN_COMPLETE, SessionUserActionType.LOAD_COMPLETE),
-        exhaustMap(() => this.router.navigate(['/home']))
+        ofType(SessionUserActionType.LOGIN_COMPLETE),
+        exhaustMap(() => this.router.navigate(['/main']))
       ),
     { dispatch: false }
   );

@@ -13,19 +13,22 @@ import {
 import { LogoutSessionUserAction } from '@core/store/session-user/session-user.action';
 import { UserModel } from '@core/model/user.model';
 import { AuthenticationService } from '@core/service/authentication.service';
+import { UserService } from '@core/service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  selector: 'app-users-list',
+  templateUrl: './users-list.component.html',
+  styleUrls: ['./users-list.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class UsersListComponent implements OnInit, OnDestroy {
 
   users$: Observable<UserModel[]>;
   constructor(private storeSessionUser: Store<SessionUserState>,
-              private authService: AuthenticationService) {
-    this.users$ = authService.allUsers$;
+              private userService: UserService,
+              private router: Router) {
+    this.users$ = userService.allUsers$;
   }
 
   get sessionUser$(): Observable<SessionUserModel | null | undefined> {
@@ -57,36 +60,6 @@ export class MainComponent implements OnInit, OnDestroy {
     ];
   }
 
-  users: UserModel[] = [
-      {
-        uid: '1',
-        fullName: 'Arystan Kalimov',
-        username: 'Rake?',
-        phoneNumber: '+7 777 777 77 77',
-        role: 'admin',
-        shopName: 'One Technologies',
-        status: true
-      },
-      {
-        uid: '2',
-        fullName: 'Damir Kalimov',
-        username: null,
-        phoneNumber: '+7 777 777 77 77',
-        role: 'seller',
-        shopName: 'One Technologies',
-        status: false
-      },
-      {
-        uid: '3',
-        fullName: 'Arystan Alimov',
-        username: 'Rake?',
-        phoneNumber: '+7 777 777 77 77',
-        role: 'admin',
-        shopName: 'One Technologies',
-        status: true
-      }
-    ];
-
   ngOnInit(): void {}
 
   ngOnDestroy(): void {}
@@ -102,7 +75,8 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   onEdit = (element?: UserModel) => {
-    alert(element?.fullName + ' edit');
+    // alert(element?.fullName + ' edit');
+    this.router.navigate([`main/user-edit/${element?.uid}`]);
   }
 
   onSave = (element?: UserModel) => {

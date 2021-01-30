@@ -26,12 +26,4 @@ export class AuthenticationService {
         })
       );
   }
-  get allUsers$(): Observable<UserModel[]> {
-    return this.firebaseFirestore.collection<UserModel>(`users`).valueChanges()
-      .pipe(
-        catchError(error => {
-          return of([] as UserModel[]);
-        })
-      );
-  }
 }
