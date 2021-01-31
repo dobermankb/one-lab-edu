@@ -12,6 +12,7 @@ import { SessionUserEffect } from '@core/store/session-user/session-user.effect'
 import { RouterModule } from '@angular/router';
 import { reducers } from '@core/store';
 import { MainGuard } from '@core/guard/main.guard';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MainGuard } from '@core/guard/main.guard';
     AngularFireAuthModule,
 
     StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([
       SessionUserEffect
     ])
