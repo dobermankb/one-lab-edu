@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
@@ -12,9 +12,11 @@ import {
 } from '@core/store/session-user/session-user.selector';
 import { LogoutSessionUserAction } from '@core/store/session-user/session-user.action';
 import { UserModel } from '@core/model/user.model';
-import { AuthenticationService } from '@core/service/authentication.service';
 import { UserService } from '@core/service/user.service';
 import { Router } from '@angular/router';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-users-list',
@@ -22,47 +24,56 @@ import { Router } from '@angular/router';
   styleUrls: ['./users-list.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UsersListComponent implements OnInit, OnDestroy {
-
-  users$: Observable<UserModel[]>;
+export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild(MatSort) sort?: MatSort;
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
+    this.paginator = mp;
+    this.setDataSourceAttributes();
+  }
+  sub: Subscription;
   constructor(private storeSessionUser: Store<SessionUserState>,
               private userService: UserService,
               private router: Router) {
     this.users$ = userService.allUsers$;
+    this.dataSource = new MatTableDataSource<UserModel>([]);
+    this.sub = userService.allUsers$.subscribe(users =>
+      this.dataSource = new MatTableDataSource<UserModel>(users)
+    );
   }
 
-  get sessionUser$(): Observable<SessionUserModel | null | undefined> {
-    return this.storeSessionUser.select(selectSessionUser);
-  }
+  isLoggedIn$ = this.storeSessionUser.select(selectIsLoggedIn);
+  isLoading$ = this.storeSessionUser.select(selectIsLoading);
+  errorMsg$ = this.storeSessionUser.select(selectErrorMsg);
+  sessionUser$ = this.storeSessionUser.select(selectSessionUser);
 
-  get isLoggedIn$(): Observable<boolean> {
-    return this.storeSessionUser.select(selectIsLoggedIn);
-  }
+  displayedColumns = [
+    'fullName',
+    'username',
+    'phoneNumber',
+    'role',
+    'shopName',
+    'status',
+    'actions',
+  ];
 
-  get isLoading$(): Observable<boolean> {
-    return this.storeSessionUser.select(selectIsLoading);
-  }
+  users$: Observable<UserModel[]>;
+  dataSource: MatTableDataSource<UserModel>;
 
-  get errorMsg$(): Observable<string | null | undefined> {
-    return this.storeSessionUser.select(selectErrorMsg);
-  }
-
-  get displayedColumns(): string[] {
-    return [
-      'fullName',
-      'username',
-      'phoneNumber',
-      'role',
-      'shopName',
-      'status',
-      'toggleStatus',
-      'actions',
-    ];
+  applyFilter(eventTarget: any): void {
+    let filterValue = (eventTarget as HTMLInputElement).value;
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {}
+  ngAfterViewInit(): void {}
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
 
   logout = () => {
     this.storeSessionUser.dispatch(LogoutSessionUserAction());
@@ -79,7 +90,9 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.router.navigate([`main/user-edit/${element?.uid}`]);
   }
 
-  onSave = (element?: UserModel) => {
-    alert(element?.fullName + ' saved');
+  private setDataSourceAttributes(): void {
+    console.log(this.paginator, this.sort);
+    this.dataSource.paginator = this.paginator ? this.paginator : null;
+    this.dataSource.sort = this.sort ? this.sort : null;
   }
 }

@@ -10,6 +10,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { UserEditComponent } from './pages/user-edit/user-edit.component';
     MatIconModule,
     MatProgressSpinnerModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatInputModule,
+    MatSortModule,
+    MatCheckboxModule
   ]
 })
 export class MainModule {

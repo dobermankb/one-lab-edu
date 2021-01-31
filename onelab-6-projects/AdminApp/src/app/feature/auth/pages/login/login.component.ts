@@ -14,15 +14,27 @@ import { selectErrorMsg, selectIsLoading } from '@core/store/session-user/sessio
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private readonly passwordMinlength = 6;
-  private readonly passwordMaxlength = 50;
-
-  loginForm?: FormGroup;
   constructor(public authenticationService: AuthenticationService,
               public router: Router,
               private formBuilder: FormBuilder,
               private storeSessionUser: Store<SessionUserState>) {
   }
+
+  get email(): AbstractControl | null | undefined {
+    return this.loginForm?.get('email');
+  }
+
+  get password(): AbstractControl | null | undefined {
+    return this.loginForm?.get('password');
+  }
+  private readonly passwordMinlength = 6;
+  private readonly passwordMaxlength = 50;
+
+  loginForm?: FormGroup;
+
+  isLoading$ = this.storeSessionUser.select(selectIsLoading);
+  errorMsg$ = this.storeSessionUser.select(selectErrorMsg);
+
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group(
       {
@@ -40,22 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.loginForm?.reset();
-  }
-
-  get email(): AbstractControl | null | undefined {
-    return this.loginForm?.get('email');
-  }
-
-  get password(): AbstractControl | null | undefined {
-    return this.loginForm?.get('password');
-  }
-
-  get isLoading$(): Observable<boolean> {
-    return this.storeSessionUser.select(selectIsLoading);
-  }
-
-  get errorMsg$(): Observable<string | null | undefined> {
-    return this.storeSessionUser.select(selectErrorMsg);
   }
 
   login(): void {

@@ -22,12 +22,8 @@ export class SessionUserEffect implements OnInitEffects {
       switchMap(() => this.authService.sessionUser$
         .pipe(
           take(1),
-          map(user => {
-            if (user) {
-              const sessionUser = {
-                uid: user.uid,
-                role: user.role,
-              };
+          map(sessionUser => {
+            if (sessionUser) {
               return LoadSessionUserCompleteAction( { sessionUser } );
             } else {
               return LoadSessionUserFailAction();
@@ -52,12 +48,8 @@ export class SessionUserEffect implements OnInitEffects {
           switchMap((authState) => this.authService.sessionUser$
             .pipe(
               take(1),
-              map(user => {
-                if (user) {
-                  const sessionUser = {
-                    uid: user.uid,
-                    role: user.role,
-                  };
+              map(sessionUser => {
+                if (sessionUser) {
                   return LoginSessionUserCompleteAction( { sessionUser } );
                 } else {
                   return LoginSessionUserFailAction({ error: Error('No session user!') });

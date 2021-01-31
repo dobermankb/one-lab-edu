@@ -1,79 +1,33 @@
-#notfound {
-  position: relative;
-  height: 100%;
-}
+$nf__font-size: 10vw;
+$nf__margin: 2vw;
 
 .notfound {
+  padding: $nf__font-size;
   width: 100%;
-  line-height: 1.4;
   text-align: center;
-  padding: 5%;
-}
-
-.notfound .notfound-404 {
-  position: relative;
-  height: 220px;
-}
-
-.notfound .notfound-404 h1 {
-  font-family: 'Kanit', sans-serif;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  font-size: 186px;
-  font-weight: 200;
-  margin: 0;
-  background: linear-gradient(130deg, #325eb8, #12306b);
-  color:transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  text-transform: uppercase;
-}
-
-.notfound h2 {
-  font-family: 'Kanit', sans-serif;
-  font-size: 33px;
-  font-weight: 200;
-  text-transform: uppercase;
-  margin-top: 0;
-  margin-bottom: 25px;
-  letter-spacing: 3px;
-}
-
-
-.notfound p {
-  font-family: 'Kanit', sans-serif;
-  font-size: 16px;
-  font-weight: 200;
-  margin-top: 0;
-  margin-bottom: 25px;
-}
-
-
-.notfound a {
-  font-family: 'Kanit', sans-serif;
-  color: #12306b;
-  font-weight: 200;
-  text-decoration: none;
-  border-bottom: 1px dashed #12306b;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-@media only screen and (max-width: 480px) {
-  .notfound .notfound-404 {
-    position: relative;
-    height: 168px;
+  &__title {
+    font-size: $nf__font-size;
+    line-height: $nf__font-size;
+    font-weight: bold;
+  }
+  &__subtitle {
+    margin-top: $nf__margin;
+    font-size: $nf__font-size / 2;
+    line-height: $nf__font-size / 2;
+    font-weight: normal;
+  }
+  &__text, &__link {
+    display: inline-block;
+    margin-top: $nf__margin;
+    font-size: $nf__font-size / 4;
+    line-height: $nf__font-size / 4;
+    font-weight: lighter;
   }
 
-  .notfound .notfound-404 h1 {
-    font-size: 142px;
+  &__link:link, &__link:visited {
+    text-decoration: none;
   }
-
-  .notfound h2 {
-    font-size: 22px;
+  &__link:hover, &__link:active {
+    text-decoration: underline;
   }
 }
