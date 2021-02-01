@@ -13,13 +13,13 @@ export class LoginComponent implements OnInit {
 
   login: string;
   password: string;
-  loading$: Observable<{loading: boolean}>;
+  loginstate$: Observable<{loading: boolean, isLoggedIn: boolean}>;
   form: FormGroup;
 
-  constructor(private store: Store<{ loading: false }>, private fb: FormBuilder) { }
+  constructor(private store: Store<{ login: {loading: boolean, isLoggedIn: boolean} }>, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.loading$ = this.store.pipe(select(state => state));
+    this.loginstate$ = this.store.pipe(select(state => state.login));
     this.form = this.fb.group({
       login: [null, Validators.required],
       password: [null, Validators.required],
@@ -29,6 +29,6 @@ export class LoginComponent implements OnInit {
   submit(e) {
     e.preventDefault();
     console.log(this.form);
-    this.store.dispatch( Login({login: this.login, password: this.password}));
+    this.store.dispatch( Login({login: this.form.value.login, password: this.form.get('password').value}));
   }
 }

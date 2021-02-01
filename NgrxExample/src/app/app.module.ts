@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { counterReducer } from './store/counter.reducer';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +16,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
+import {AuthEffects} from './store/login.effects';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import {MatButtonModule} from "@angular/material/button";
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot({count: counterReducer, login: loginReducer}),
+    EffectsModule.forRoot([AuthEffects]),
     FormsModule,
     BrowserAnimationsModule,
     MatCardModule,
