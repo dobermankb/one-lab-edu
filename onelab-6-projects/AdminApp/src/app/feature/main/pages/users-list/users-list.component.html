@@ -20,12 +20,24 @@
   <div class="filter">
     <mat-form-field class="filter__bar" appearance="fill">
       <mat-icon matSuffix>filter_list</mat-icon>
-      <input class="filter__input" matInput (keyup)="applyFilter($event.target)" placeholder="Filter" autocomplete="off">
+      <input class="filter__input" matInput [(ngModel)]="filterInput" (keyup)="applyFilter()" placeholder="Filter" autocomplete="off">
     </mat-form-field>
-    <br>
-    <mat-checkbox color="primary">Hide inactive</mat-checkbox>
-    <br>
-    <mat-checkbox color="primary">Hide active</mat-checkbox>
+    <mat-form-field class="filter__option mat-form-field" appearance="outline">
+      <mat-label>Role</mat-label>
+      <mat-select color="primary" [(ngModel)]="filterSelection.role" (selectionChange)="applyFilter()" required>
+        <mat-option [value]="['admin', 'seller']">All</mat-option>
+        <mat-option [value]="['admin']">admin</mat-option>
+        <mat-option [value]="['seller']">seller</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="filter__option mat-form-field" appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select color="primary" [(ngModel)]="filterSelection.status" (selectionChange)="applyFilter()" required>
+        <mat-option [value]="[true, false]">All</mat-option>
+        <mat-option [value]="[true]">Active</mat-option>
+        <mat-option [value]="[false]">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>

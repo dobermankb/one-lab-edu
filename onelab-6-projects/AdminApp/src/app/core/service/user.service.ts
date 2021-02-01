@@ -24,14 +24,14 @@ export class UserService {
       finalize(() => console.log('finalized'))
     );
 
-  getUser$(uid: string): Observable<UserModel | undefined | null> {
-    return this.firebaseFirestore.doc<UserModel>(`users/${uid}`).valueChanges()
-      .pipe(
-        catchError(error => {
-          return of(null);
-        })
-      );
-  }
+  getUser$ = (uid: string) => this.firebaseFirestore.doc<UserModel>(`users/${uid}`).valueChanges()
+    .pipe(
+      take(1),
+      catchError(error => {
+        return of(null);
+      })
+    )
+
   setUser = (userModel: UserModel) =>
     this.firebaseFirestore.doc<UserModel>(`users/${userModel.uid}`).set(userModel)
 }

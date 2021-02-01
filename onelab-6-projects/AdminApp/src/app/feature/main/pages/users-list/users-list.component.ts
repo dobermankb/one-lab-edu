@@ -32,14 +32,32 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setDataSourceAttributes();
   }
   sub: Subscription;
+  filterInput = '';
+  filterSelection = {
+    role: ['admin', 'seller'],
+    status: [true, false]
+  };
   constructor(private storeSessionUser: Store<SessionUserState>,
               private userService: UserService,
               private router: Router) {
     this.users$ = userService.allUsers$;
     this.dataSource = new MatTableDataSource<UserModel>([]);
-    this.sub = userService.allUsers$.subscribe(users =>
-      this.dataSource = new MatTableDataSource<UserModel>(users)
-    );
+    this.sub = userService.allUsers$.subscribe(users => {
+      this.dataSource = new MatTableDataSource<UserModel>(users);
+      this.dataSource.filterPredicate = (data: UserModel, filter: string) => {
+        console.log(data, filter);
+        console.log(this.filterSelection);
+        console.log(this.filterInput);
+        return this.filterSelection.role.includes(data.role)
+          && this.filterSelection.status.includes(data.status)
+          &&
+          (filter.length === 0
+            || !!data.fullName?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.username?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.phoneNumber?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.shopName?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase()));
+      };
+    });
   }
 
   isLoggedIn$ = this.storeSessionUser.select(selectIsLoggedIn);
@@ -60,11 +78,16 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
   users$: Observable<UserModel[]>;
   dataSource: MatTableDataSource<UserModel>;
 
-  applyFilter(eventTarget: any): void {
-    let filterValue = (eventTarget as HTMLInputElement).value;
+  applyFilter(): void {
+    console.log('fired applyFilter');
+    let filterValue = this.filterInput;
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    this.dataSource.filter = JSON.stringify({
+      filterInput: this.filterInput,
+      filterSelection: this.filterSelection
+    });
+    console.log(filterValue);
   }
 
   ngOnInit(): void {}

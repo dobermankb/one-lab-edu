@@ -15,10 +15,13 @@ table {
 
 .filter {
   &__bar {
+    display: block;
     min-width: 50%;
     max-width: 100%;
   }
-  &__input {
+  &__option {
+    display: inline-block;
+    margin-right: 5px;
   }
 }
 

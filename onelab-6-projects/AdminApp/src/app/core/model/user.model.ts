@@ -8,7 +8,7 @@ export interface UserModel {
   username?: string | null;
   phoneNumber?: string | null;
   shopName?: string | null;
-  products?: ProductModel[];
+  // products?: ProductModel[];
 }
 
 
