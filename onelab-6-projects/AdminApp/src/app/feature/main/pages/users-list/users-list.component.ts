@@ -12,16 +12,17 @@ import {
 } from '@core/store/session-user/session-user.selector';
 import { LogoutSessionUserAction } from '@core/store/session-user/session-user.action';
 import { UserModel } from '@core/model/user.model';
-import { UserService } from '@core/service/user.service';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UsersListComponentStoreService } from './component-store/users-list.component-store.service';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss'],
+  providers: [UsersListComponentStoreService]
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -31,23 +32,21 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.paginator = mp;
     this.setDataSourceAttributes();
   }
-  sub: Subscription;
+  sub = new Subscription();
   filterInput = '';
   filterSelection = {
     role: ['admin', 'seller'],
     status: [true, false]
   };
   constructor(private storeSessionUser: Store<SessionUserState>,
-              private userService: UserService,
+              private usersListStore: UsersListComponentStoreService,
               private router: Router) {
-    this.users$ = userService.allUsers$;
+    this.usersListStore.loadUsers('dummy');
+    this.users$ = this.usersListStore.users$;
     this.dataSource = new MatTableDataSource<UserModel>([]);
-    this.sub = userService.allUsers$.subscribe(users => {
+    this.sub.add(this.users$.subscribe(users => {
       this.dataSource = new MatTableDataSource<UserModel>(users);
       this.dataSource.filterPredicate = (data: UserModel, filter: string) => {
-        console.log(data, filter);
-        console.log(this.filterSelection);
-        console.log(this.filterInput);
         return this.filterSelection.role.includes(data.role)
           && this.filterSelection.status.includes(data.status)
           &&
@@ -57,7 +56,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
             || !!data.phoneNumber?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
             || !!data.shopName?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase()));
       };
-    });
+    }));
   }
 
   isLoggedIn$ = this.storeSessionUser.select(selectIsLoggedIn);
@@ -79,7 +78,6 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
   dataSource: MatTableDataSource<UserModel>;
 
   applyFilter(): void {
-    console.log('fired applyFilter');
     let filterValue = this.filterInput;
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
@@ -87,7 +85,6 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
       filterInput: this.filterInput,
       filterSelection: this.filterSelection
     });
-    console.log(filterValue);
   }
 
   ngOnInit(): void {}
@@ -102,19 +99,21 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.storeSessionUser.dispatch(LogoutSessionUserAction());
   }
 
-  statusToggle = (element?: UserModel) => {
-    console.log(element);
-    alert(`statusToggle function ${element?.fullName}`);
-    // console.log('Status is toggled ' + element);
+  statusToggle = (element: UserModel) => {
+    console.log('Status is toggled ' + element);
+    element.status = !element.status;
+    this.usersListStore.setUser(element);
   }
 
   onEdit = (element?: UserModel) => {
-    // alert(element?.fullName + ' edit');
     this.router.navigate([`main/user-edit/${element?.uid}`]);
   }
 
+  onResetPassword = (element?: UserModel) => {
+    alert('Password reset email sent');
+  }
+
   private setDataSourceAttributes(): void {
-    console.log(this.paginator, this.sort);
     this.dataSource.paginator = this.paginator ? this.paginator : null;
     this.dataSource.sort = this.sort ? this.sort : null;
   }

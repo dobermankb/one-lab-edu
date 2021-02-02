@@ -24,17 +24,20 @@
 
     <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
       <mat-label>Phone number</mat-label>
-      <input matInput formControlName="phoneNumber" autocomplete="off">
-<!--      <mat-error *ngIf="phoneNumber?.touched && phoneNumber?.invalid">-->
-<!--        <span *ngIf="phoneNumber?.errors?.maxlength">This phone number is too long. </span>-->
-<!--      </mat-error>-->
+      <input matInput
+             formControlName="phoneNumber"
+             type="tel"
+             autocomplete="off">
+      <mat-error *ngIf="phoneNumber?.touched && phoneNumber?.invalid">
+        <span *ngIf="phoneNumber?.errors?.pattern">This phone number is invalid </span>
+      </mat-error>
     </mat-form-field>
 
 
     <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
       <mat-label>Shop name</mat-label>
       <input matInput formControlName="shopName" autocomplete="off">
-      <mat-error *ngIf="shopName?.touched && phoneNumber?.invalid">
+      <mat-error *ngIf="shopName?.touched && shopName?.invalid">
         <span *ngIf="shopName?.errors?.maxlength">This shop name is too long. </span>
       </mat-error>
     </mat-form-field>
@@ -61,8 +64,15 @@
       </mat-error>
     </mat-form-field>
 
-    <button class="editform__button" mat-raised-button color="primary" type="submit" [disabled]="userEditForm.invalid">
+    <button class="editform__button"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="userEditForm.invalid || (isLoading$ | async)">
       Save
+      <mat-icon *ngIf="isLoading$ | async">
+        <mat-spinner color="accent" diameter="20"></mat-spinner>
+      </mat-icon>
     </button>
 
   </form>

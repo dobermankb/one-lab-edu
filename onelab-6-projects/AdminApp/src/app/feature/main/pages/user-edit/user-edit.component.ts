@@ -5,29 +5,28 @@ import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
 import { UserModel } from '@core/model/user.model';
 import { UserService } from '@core/service/user.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductModel } from '@core/model/product.model';
+import { UserEditComponentStoreService } from './component-store/user-edit.component-store.service';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss']
+  styleUrls: ['./user-edit.component.scss'],
+  providers: [UserEditComponentStoreService]
 })
 export class UserEditComponent implements OnInit, OnDestroy {
-
   private readonly MAX_LENGTH = 50;
-  userToEdit$: Observable<UserModel | undefined | null>;
   userEditForm?: FormGroup;
-  sub: Subscription;
+  userToEdit$: Observable<UserModel | null | undefined>;
+  isLoading$ = this.userEditStore.isLoading$;
+  errorMsg$ = this.userEditStore.errorMsg$;
+  sub = new Subscription();
+
   constructor(private activatedRoute: ActivatedRoute,
-              private userService: UserService,
+              private userEditStore: UserEditComponentStoreService,
               private formBuilder: FormBuilder) {
-    this.userToEdit$ = this.activatedRoute.paramMap
-      .pipe(
-        switchMap((params: ParamMap) => this.userService.getUser$(params.get('uid') || '')),
-        shareReplay(1),
-        catchError(error => of(null))
-      );
-    this.sub = this.userToEdit$.subscribe(user => {
+    this.userEditStore.loadUser(this.activatedRoute.snapshot.paramMap.get('uid') || '');
+    this.userToEdit$ = this.userEditStore.user$;
+    this.sub.add(this.userToEdit$.subscribe(user => {
       if (user) {
         this.userEditForm = this.formBuilder.group(
           {
@@ -36,12 +35,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
             status: [user.status, [Validators.required]],
             fullName: [user.fullName, [Validators.maxLength(this.MAX_LENGTH)]],
             username: [user.username, [Validators.maxLength(this.MAX_LENGTH)]],
-            phoneNumber: [user.phoneNumber, [Validators.nullValidator]],
+            phoneNumber: [user.phoneNumber, [Validators.pattern('^(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
             shopName: [user.shopName, [Validators.maxLength(this.MAX_LENGTH)]],
           }
         );
       }
-    });
+    }));
   }
 
   get role(): AbstractControl | null | undefined {
@@ -77,10 +76,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
     if (this.userEditForm?.invalid) {
       return;
     }
-    console.log(this.userEditForm?.getRawValue());
-    console.log(this.userEditForm);
-    this.userService.setUser(this.userEditForm?.getRawValue() as UserModel)
-      .then(() => console.log('successful'))
-      .catch((error) => console.log(error));
+    this.userEditStore.setUser(this.userEditForm?.getRawValue() as UserModel);
   }
 }

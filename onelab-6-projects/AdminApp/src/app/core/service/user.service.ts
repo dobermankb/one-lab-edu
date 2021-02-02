@@ -11,18 +11,15 @@ export class UserService {
 
   constructor(private firebaseFirestore: AngularFirestore) { }
 
-  allUsers$ = this.firebaseFirestore.collection<UserModel>(`users`).valueChanges()
-    .pipe(
-      take(1),
-      shareReplay(1),
-      tap(collection => {
-        console.log('collection', collection);
-      }),
-      catchError(error => {
-        return of([] as UserModel[]);
-      }),
-      finalize(() => console.log('finalized'))
-    );
+  getAllUsers$(): Observable<UserModel[]> {
+    return this.firebaseFirestore.collection<UserModel>(`users`).valueChanges()
+      .pipe(
+        take(1),
+        catchError(error => {
+          return of([] as UserModel[]);
+        })
+      );
+  }
 
   getUser$ = (uid: string) => this.firebaseFirestore.doc<UserModel>(`users/${uid}`).valueChanges()
     .pipe(

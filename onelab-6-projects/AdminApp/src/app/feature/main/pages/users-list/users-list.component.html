@@ -87,36 +87,25 @@
         <button mat-raised-button
                 color="primary"
                 (click)="onEdit(element)">
-          Edit
-          <mat-icon>edit</mat-icon>
+          <span>Edit </span>
+          <mat-icon matSuffix>edit</mat-icon>
         </button>
 
         <button mat-raised-button
                 color="warn"
-                (click)="statusToggle(element)">
-          Deactivate
-          <mat-icon>remove</mat-icon>
+                (click)="onResetPassword(element)"
+                [disabled]="true">
+          <span>Reset password </span>
+          <mat-icon matSuffix>email</mat-icon>
         </button>
 
-
-        <button mat-mini-fab color="primary" aria-label="Edit user" (click)="onEdit(element)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-mini-fab color="{{ element.status ? 'warn' : 'accent'}}" aria-label="Delete user">
-          <mat-icon>{{ element.status ? 'remove' : 'add'}}</mat-icon>
-        </button>
-        <button mat-mini-fab color="accent" aria-label="Reset user">
-          <mat-icon>password</mat-icon>
-        </button>
         <button mat-raised-button
                 color="{{ element.status ? 'warn' : 'accent'}}"
-                type="button"
                 (click)="statusToggle(element)">
-          <span>{{ element.status ? 'Deactivate' : 'Activate'}}</span>
-          <mat-icon *ngIf="isLoading$ | async">
-            <mat-spinner color="primary" diameter="20"></mat-spinner>
-          </mat-icon>
+          <span>{{ element.status ? 'Deactivate' : 'Activate'}} </span>
+          <mat-icon matSuffix>power_settings_new</mat-icon>
         </button>
+
       </td>
     </ng-container>
 
