@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { reducers } from '@core/store';
 import { MainGuard } from '@core/guard/main.guard';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { environment } from '@env';
 
 @NgModule({
   declarations: [
@@ -22,14 +23,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     CommonModule,
     RouterModule,
 
-    AngularFireModule.initializeApp({
-      apiKey: 'AIzaSyCv37DNngtlQRBlXLeXsuBN2F6DCmTk7PE',
-      authDomain: 'authentification-one-lab.firebaseapp.com',
-      projectId: 'authentification-one-lab',
-      storageBucket: 'authentification-one-lab.appspot.com',
-      messagingSenderId: '272919582902',
-      appId: '1:272919582902:web:c893d6befd40a798556e17'
-    }),
+    AngularFireModule.initializeApp(environment.FIREBASE_CONFIG),
     AngularFireAuthModule,
 
     StoreModule.forRoot(reducers),

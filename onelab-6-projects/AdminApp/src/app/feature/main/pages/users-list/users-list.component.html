@@ -39,6 +39,10 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <button mat-raised-button color="primary" type="button" [disabled]="true">
+    Create a new user
+    <mat-icon matSuffix>account_box</mat-icon>
+  </button>
   <mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
     <!-- Full Name Column -->

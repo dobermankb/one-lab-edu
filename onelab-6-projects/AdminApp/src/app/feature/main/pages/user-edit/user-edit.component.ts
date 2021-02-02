@@ -35,7 +35,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
             status: [user.status, [Validators.required]],
             fullName: [user.fullName, [Validators.maxLength(this.MAX_LENGTH)]],
             username: [user.username, [Validators.maxLength(this.MAX_LENGTH)]],
-            phoneNumber: [user.phoneNumber, [Validators.pattern('^(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
+            phoneNumber: [user.phoneNumber,
+              [Validators.pattern('^([\\s]*)(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
             shopName: [user.shopName, [Validators.maxLength(this.MAX_LENGTH)]],
           }
         );
