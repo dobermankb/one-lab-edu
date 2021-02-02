@@ -19,6 +19,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   userToEdit$: Observable<UserModel | null | undefined>;
   isLoading$ = this.userEditStore.isLoading$;
   errorMsg$ = this.userEditStore.errorMsg$;
+  successMsg$ = this.userEditStore.successMsg$;
   sub = new Subscription();
 
   constructor(private activatedRoute: ActivatedRoute,

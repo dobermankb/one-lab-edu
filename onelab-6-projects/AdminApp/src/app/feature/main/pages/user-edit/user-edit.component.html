@@ -74,6 +74,7 @@
         <mat-spinner color="accent" diameter="20"></mat-spinner>
       </mat-icon>
     </button>
-    <p class="auth__text auth__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+    <p class="editform__text editform__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+    <p class="editform__text editform__text--successful fade-in mat-body" *ngIf="successMsg$ | async; let successfulMsg">{{ successfulMsg }}</p>
   </form>
 </div>

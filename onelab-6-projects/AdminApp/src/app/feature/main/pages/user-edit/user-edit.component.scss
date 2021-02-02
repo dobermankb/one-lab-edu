@@ -21,4 +21,14 @@
     margin-left: auto;
     margin-right: auto;
   }
+  &__text {
+    text-align: center;
+  }
+
+  &__text--danger {
+    color: red;
+  }
+  &__text--successful {
+    color: green;
+  }
 }

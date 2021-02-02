@@ -5,10 +5,17 @@ import { Injectable } from '@angular/core';
 import { EMPTY, from, Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
+enum LOADING_STATE {
+  INIT,
+  LOADING,
+  LOADED
+}
+
 interface UserEditState {
   user?: UserModel | null;
-  isLoading: boolean;
+  loadingState: LOADING_STATE;
   errorMsg?: string | null;
+  successMsg?: string | null;
 }
 
 @Injectable()
@@ -17,12 +24,15 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
     super({
       user: null,
       errorMsg: null,
-      isLoading: false
+      successMsg: null,
+      loadingState: LOADING_STATE.INIT
     });
   }
   readonly user$: Observable<UserModel | null | undefined> = this.select(state => state.user);
-  readonly isLoading$: Observable<boolean> = this.select(state => state.isLoading);
+  readonly isLoading$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADING);
+  readonly isLoaded$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADED);
   readonly errorMsg$: Observable<string | null | undefined> = this.select(state => state.errorMsg);
+  readonly successMsg$: Observable<string | null | undefined> = this.select(state => state.successMsg);
 
   readonly updateError = this.updater((state: UserEditState, errorMsg: string | null | undefined) => {
     return {
@@ -31,10 +41,17 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
     };
   });
 
-  readonly setLoading = this.updater((state: UserEditState, isLoading: boolean) => {
+  readonly updateSuccessMsg = this.updater((state: UserEditState, successMsg: string | null | undefined) => {
     return {
       ...state,
-      isLoading
+      successMsg
+    };
+  });
+
+  readonly setLoading = this.updater((state: UserEditState, loadingState: LOADING_STATE) => {
+    return {
+      ...state,
+      loadingState
     };
   });
 
@@ -48,11 +65,11 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
   readonly loadUser = this.effect((userUid$: Observable<string>) => {
     return userUid$.pipe(
       switchMap((userUid: string) => {
-        this.setLoading(true);
+        this.setLoading(LOADING_STATE.LOADING);
         return this.userService.getUser$(userUid).pipe(
           tapResponse(
             user => {
-              this.setLoading(false);
+              this.setLoading(LOADING_STATE.LOADED);
               this.updateError(null);
               this.updateUser(user);
             },
@@ -66,12 +83,14 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
   readonly setUser = this.effect((user$: Observable<UserModel>) => {
     return user$.pipe(
       switchMap((user: UserModel) => {
-        this.setLoading(true);
+        this.setLoading(LOADING_STATE.LOADING);
+        this.updateSuccessMsg(null);
         return from(this.userService.setUser(user)).pipe(
           tapResponse(
             successful => {
-              this.setLoading(false);
+              this.setLoading(LOADING_STATE.LOADED);
               this.updateError(null);
+              this.updateSuccessMsg('Successfully updated the user');
               this.updateUser(user);
             },
             (error) => this.updateError(String(error))
