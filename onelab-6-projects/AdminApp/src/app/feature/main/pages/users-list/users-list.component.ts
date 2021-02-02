@@ -46,6 +46,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource = new MatTableDataSource<UserModel>([]);
     this.sub.add(this.users$.subscribe(users => {
       this.dataSource = new MatTableDataSource<UserModel>(users);
+      this.setDataSourceAttributes();
       this.dataSource.filterPredicate = (data: UserModel, filter: string) => {
         return this.filterSelection.role.includes(data.role)
           && this.filterSelection.status.includes(data.status)

@@ -24,7 +24,7 @@
     </mat-form-field>
     <mat-form-field class="filter__option mat-form-field" appearance="outline">
       <mat-label>Role</mat-label>
-      <mat-select color="primary" [(ngModel)]="filterSelection.role" (selectionChange)="applyFilter()" required>
+      <mat-select color="primary" [(ngModel)]="filterSelection.role" (selectionChange)="applyFilter()">
         <mat-option [value]="['admin', 'seller']">All</mat-option>
         <mat-option [value]="['admin']">admin</mat-option>
         <mat-option [value]="['seller']">seller</mat-option>
@@ -32,7 +32,7 @@
     </mat-form-field>
     <mat-form-field class="filter__option mat-form-field" appearance="outline">
       <mat-label>Status</mat-label>
-      <mat-select color="primary" [(ngModel)]="filterSelection.status" (selectionChange)="applyFilter()" required>
+      <mat-select color="primary" [(ngModel)]="filterSelection.status" (selectionChange)="applyFilter()">
         <mat-option [value]="[true, false]">All</mat-option>
         <mat-option [value]="[true]">Active</mat-option>
         <mat-option [value]="[false]">Inactive</mat-option>
