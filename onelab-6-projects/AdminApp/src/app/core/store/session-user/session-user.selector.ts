@@ -18,6 +18,11 @@ export const selectSessionUser = createSelector(
   (state: SessionUserState) => state.sessionUser
 );
 
+export const selectIsAdmin = createSelector(
+  selectFeature,
+  (state: SessionUserState) => state.sessionUser?.role === 'admin'
+);
+
 export const selectErrorMsg = createSelector(
   selectFeature,
   (state: SessionUserState) => state.errorMsg

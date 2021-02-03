@@ -3,7 +3,8 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { UserService } from '@core/service/user.service';
 import { Injectable } from '@angular/core';
 import { EMPTY, from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface UserEditState {
   users: UserModel[];
@@ -13,7 +14,7 @@ interface UserEditState {
 
 @Injectable()
 export class UsersListComponentStoreService extends ComponentStore<UserEditState> {
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     super({
       users: [],
       errorMsg: null,
@@ -72,17 +73,21 @@ export class UsersListComponentStoreService extends ComponentStore<UserEditState
             successful => {
               this.setLoading(false);
               this.updateError(null);
-              // this.updateUsers(this.users$.pipe(
-              //   map(user => {
-              //     if (user.uid === userToEdit.uid) {
-              //       return userToEdit;
-              //     } else {
-              //       return user;
-              //     }
-              //   }),
-              //   catchError(error => EMPTY)
-              // ));
-              this.loadUsers('dummy'); // need to change this probably
+              this.updateUsers(
+                this.users$.pipe(
+                  take(1),
+                  map(users => {
+                    return users.map(user => {
+                      if (user.uid === userToEdit.uid) {
+                        return userToEdit;
+                      } else {
+                        return user;
+                      }
+                    });
+                  }),
+                  catchError(error => EMPTY)
+                )
+              );
             },
             (error) => this.updateError(String(error))
           ),
@@ -91,4 +96,13 @@ export class UsersListComponentStoreService extends ComponentStore<UserEditState
       })
     );
   });
+
+  readonly goToEditUser = this.effect((userUid$: Observable<string>) => {
+    return userUid$.pipe(
+      switchMap((userUid: string) => {
+        return from(this.router.navigate([`main/user-edit/${userUid}`]));
+      })
+    );
+  });
+
 }

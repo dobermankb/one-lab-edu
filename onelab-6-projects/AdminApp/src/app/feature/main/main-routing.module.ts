@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { UsersListComponent } from './pages/users-list/users-list.component';
 import { MainGuard } from '@core/guard/main.guard';
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
+import { ProductEditComponent } from './pages/product-edit/product-edit.component';
+import { ProductsListComponent } from './pages/products-list/products-list.component';
 
 const routes: Routes = [
   {
@@ -28,7 +30,31 @@ const routes: Routes = [
           accessRoles: ['admin']
         },
         component: UserEditComponent
-      }
+      },
+      {
+        path: 'product-edit/:uid',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        component: ProductEditComponent
+      },
+      {
+        path: 'user-edit/:uid/products-list',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        component: ProductsListComponent
+      },
+      {
+        path: 'products-list',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        component: ProductsListComponent
+      },
     ]
   }
 ];

@@ -14,6 +14,7 @@ import { reducers } from '@core/store';
 import { MainGuard } from '@core/guard/main.guard';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { environment } from '@env';
+import { LayoutModule } from '@core/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { environment } from '@env';
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([
       SessionUserEffect
-    ])
+    ]),
+    LayoutModule
   ],
   providers: [
     MainGuard,

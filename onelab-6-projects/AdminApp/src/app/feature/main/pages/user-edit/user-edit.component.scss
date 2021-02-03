@@ -23,12 +23,11 @@
   }
   &__text {
     text-align: center;
-  }
-
-  &__text--danger {
-    color: red;
-  }
-  &__text--successful {
-    color: green;
+    &--danger {
+      color: red;
+    }
+    &--successful {
+      color: green;
+    }
   }
 }

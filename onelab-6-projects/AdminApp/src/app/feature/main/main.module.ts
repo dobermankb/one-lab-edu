@@ -16,11 +16,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { ProductsListComponent } from './pages/products-list/products-list.component';
+import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 
 @NgModule({
   declarations: [
     UsersListComponent,
-    UserEditComponent
+    UserEditComponent,
+    ProductsListComponent,
+    ProductEditComponent
   ],
   imports: [
     CommonModule,
