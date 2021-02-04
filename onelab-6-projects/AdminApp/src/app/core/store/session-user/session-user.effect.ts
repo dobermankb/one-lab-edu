@@ -52,7 +52,7 @@ export class SessionUserEffect implements OnInitEffects {
                 if (sessionUser) {
                   return LoginSessionUserCompleteAction( { sessionUser } );
                 } else {
-                  return LoginSessionUserFailAction({ error: Error('No session user!') });
+                  return LoginSessionUserFailAction({ error: Error('User is not permitted to enter!') });
                 }
               }),
               catchError((error) => of(LoginSessionUserFailAction({ error })))
@@ -95,12 +95,12 @@ export class SessionUserEffect implements OnInitEffects {
     { dispatch: false }
     );
 
-  logActions$ = createEffect(() =>
-    this.actions$.pipe(
-      tap(action => {
-        // console.log('|EFFECTS LOGGER|', action);
-      }),
-    ), { dispatch: false });
+  // logActions$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     tap(action => {
+  //       // console.log('|EFFECTS LOGGER|', action);
+  //     }),
+  //   ), { dispatch: false });
 
   constructor(
     private actions$: Actions,

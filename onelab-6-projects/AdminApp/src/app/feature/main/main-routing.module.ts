@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'users-list'
+    redirectTo: 'products-list'
   },
   {
     path: '',
@@ -43,7 +43,7 @@ const routes: Routes = [
         path: 'user-edit/:uid/products-list',
         canActivate: [MainGuard],
         data: {
-          accessRoles: ['admin', 'seller']
+          accessRoles: ['admin']
         },
         component: ProductsListComponent
       },

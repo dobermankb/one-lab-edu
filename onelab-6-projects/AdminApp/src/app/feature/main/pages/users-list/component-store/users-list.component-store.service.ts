@@ -6,14 +6,14 @@ import { EMPTY, from, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-interface UserEditState {
+interface UsersListState {
   users: UserModel[];
   isLoading: boolean;
   errorMsg?: string | null;
 }
 
 @Injectable()
-export class UsersListComponentStoreService extends ComponentStore<UserEditState> {
+export class UsersListComponentStoreService extends ComponentStore<UsersListState> {
   constructor(private userService: UserService, private router: Router) {
     super({
       users: [],
@@ -25,21 +25,21 @@ export class UsersListComponentStoreService extends ComponentStore<UserEditState
   readonly isLoading$: Observable<boolean> = this.select(state => state.isLoading);
   readonly errorMsg$: Observable<string | null | undefined> = this.select(state => state.errorMsg);
 
-  readonly updateError = this.updater((state: UserEditState, errorMsg: string | null | undefined) => {
+  readonly updateError = this.updater((state: UsersListState, errorMsg: string | null | undefined) => {
     return {
       ...state,
       errorMsg
     };
   });
 
-  readonly setLoading = this.updater((state: UserEditState, isLoading: boolean) => {
+  readonly setLoading = this.updater((state: UsersListState, isLoading: boolean) => {
     return {
       ...state,
       isLoading
     };
   });
 
-  readonly updateUsers = this.updater((state: UserEditState, users: UserModel[]) => {
+  readonly updateUsers = this.updater((state: UsersListState, users: UserModel[]) => {
     return {
       ...state,
       users

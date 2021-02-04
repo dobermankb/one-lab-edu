@@ -1,9 +1,26 @@
-<button class="goback goback__button" mat-raised-button color="primary" type="button" [routerLink]="['/main/users-list']" >
-  <mat-icon>
-    arrow_back
-  </mat-icon>
-  Go back to the list of all users
-</button>
+<div class="quick-navigation">
+  <button class="quick-navigation__button"
+          mat-raised-button
+          color="primary"
+          type="button"
+          [routerLink]="['/main/users-list']" >
+    <mat-icon>
+      arrow_back
+    </mat-icon>
+    Go back to the list of all users
+  </button>
+  <button class="quick-navigation__button"
+          mat-raised-button
+          color="accent"
+          type="button"
+          *ngIf="userToEdit$ | async"
+          [routerLink]="['products-list']">
+    List the products of this seller
+    <mat-icon>
+      arrow_forward
+    </mat-icon>
+  </button>
+</div>
 <div class="editform editform__container" *ngIf="userEditForm">
   <form class="form-group" [formGroup]="userEditForm" (ngSubmit)="onSubmit()">
     <h2>Edit user</h2>

@@ -1,7 +1,19 @@
-.goback {
-  margin: 15px;
+.quick-navigation {
+  margin-top: 15px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  &__button {
+    &:nth-child(odd) {
+      margin-left: 15px;
+      margin-right: auto;
+    }
+    &:nth-child(even) {
+      margin-left: auto;
+      margin-right: 15px;
+    }
+  }
 }
-
 .editform {
   form {
     width: 100%;
@@ -11,6 +23,11 @@
   }
   &__inputfield:nth-child(2n), &__selectfield:nth-child(2n) {
     margin-right: 5px;
+  }
+
+  &__selectfield {
+    min-width: 10%;
+    max-width: 20%;
   }
   &__inputfield {
     width: calc(50% - 5px);
