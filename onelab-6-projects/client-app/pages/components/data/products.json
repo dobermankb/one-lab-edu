@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Iphone XR",
+      "type": "iphone",
+      "feature": ["LCD Display, Loong Battery Life"],
+      "brand": "Apple",
+      "color": ["white"],
+      "image": [
+        "iphonexr1.jpg",
+        "iphonexr2.jpg",
+        "iphonexr3.jpg",
+        "iphonexr4.jpg"
+      ],
+      "price": 500
+    },
+
+    {
+      "id": 2,
+      "title": "Apple Iphone 11",
+      "type": "iphone",
+      "feature": ["Apple A13 Bionic"],
+      "brand": "Apple",
+      "color": ["green"],
+      "image": [
+        "iphone11-1.jpg",
+        "iphone11-2.jpg",
+        "iphone11-3.jpg"
+      ],
+      "price": 600
+    },
+
+    {
+      "id": 3,
+      "title": "Apple Iphone 12",
+      "type": "iphone",
+      "feature": ["5nm Apple A14"],
+      "brand": "Apple",
+      "color": ["white", "black"],
+      "image": [
+        "iphone12-3.jpg",
+        "iphone12-2.jpg",
+        "iphone12-1.jpg"
+      ],
+      "price": 750
+    }
+  ]
+}
