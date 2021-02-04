@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "onetech-project": {
+      "hosting": {
+        "AdminApp": [
+          "onetech-project"
+        ]
+      }
+    }
+  }
+}

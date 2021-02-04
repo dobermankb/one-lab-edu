@@ -1,0 +1,37 @@
+.categories{
+    //list-style-type:none;
+    position: relative;
+    left:40px;
+}
+.category{
+    text-decoration:solid;
+    font-size: 18px;
+    cursor: pointer;
+}
+.selected{
+    position: absolute;
+    right:250px;
+    top:100px;
+}
+.addCategory1{
+    position: relative;
+    left:40px;
+}
+a:hover, em {
+    color:blue;
+}
+h3{
+    text-align: center;
+}
+.list{
+    display: flex;
+    justify-content: space-between;
+    color: brown;
+}
+input {
+    height: 32px;
+    border: white 1px solid;
+}
+.left{
+    width:500px;
+}

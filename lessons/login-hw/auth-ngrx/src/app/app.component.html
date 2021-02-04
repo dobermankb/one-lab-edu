@@ -1,0 +1,33 @@
+<div class="columns">
+  <div class="column is-half is-offset-one-quarter" style="text-align: center; margin-top: 50px;">
+
+
+      <div *ngIf="user$ | async as user">
+          
+        
+      
+        <h1>Howdy, {{ user.displayName }}</h1>
+        <h4>{{ user.uid }}</h4>
+
+        <button 
+                *ngIf="user.displayName"
+                (click)="login()"
+                >
+            <span>Sign In with Google</span>
+        </button>
+      
+        <!-- <button (click)="googleLogin()" *ngIf="!user.uid" class="button is-danger">Sign In with Google</button> -->
+        <button (click)="logout()"      *ngIf="user.uid"  class="button is-warn">Logout</button>
+      </div>
+
+
+
+
+
+
+  </div>
+</div>
+
+
+
+
