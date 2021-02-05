@@ -11,8 +11,16 @@ const routes: Routes = [
     redirectTo: 'list'
   },
   {
-    path: '',
+    path: 'list',
     children: [
+      {
+        path: '',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        component: ProductsListComponent,
+      },
       {
         path: 'edit/:productUid',
         canActivate: [MainGuard],
@@ -22,7 +30,7 @@ const routes: Routes = [
         component: ProductEditComponent
       },
       {
-        path: 'list/:userUid/edit/:productUid',
+        path: ':userUid/edit/:productUid',
         canActivate: [MainGuard],
         data: {
           accessRoles: ['admin']
@@ -30,18 +38,10 @@ const routes: Routes = [
         component: ProductEditComponent
       },
       {
-        path: 'list/:userUid',
+        path: ':userUid',
         canActivate: [MainGuard],
         data: {
           accessRoles: ['admin']
-        },
-        component: ProductsListComponent
-      },
-      {
-        path: 'list',
-        canActivate: [MainGuard],
-        data: {
-          accessRoles: ['admin', 'seller']
         },
         component: ProductsListComponent
       },
