@@ -98,7 +98,10 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
             },
             (error) => this.updateError(String(error))
           ),
-          catchError(() => of(null))
+          catchError(() => {
+            this.setLoading(LOADING_STATE.LOADED);
+            return of(null);
+          })
         );
       })
     );

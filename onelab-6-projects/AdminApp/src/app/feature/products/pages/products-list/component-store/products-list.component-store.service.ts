@@ -60,7 +60,10 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
             },
             (error) => this.updateError(String(error))
           ),
-          catchError(() => of([]))
+          catchError(() => {
+            this.setLoading(false);
+            return of([]);
+          })
         );
       })
     );

@@ -92,7 +92,10 @@ export class UsersListComponentStoreService extends ComponentStore<UsersListStat
             },
             (error) => this.updateError(String(error))
           ),
-          catchError(() => of(null))
+          catchError(() => {
+            this.setLoading(false);
+            return of(null);
+          })
         );
       })
     );

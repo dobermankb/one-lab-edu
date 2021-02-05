@@ -96,7 +96,10 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
               this.updateSuccessMsg('Successfully updated the product');
               this.updateProduct(product);
             },
-            (error) => this.updateError(String(error))
+            (error) => {
+              this.setLoading(LOADING_STATE.LOADED);
+              this.updateError(String(error));
+            }
           ),
           catchError(() => of(null))
         );
@@ -106,14 +109,7 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
   readonly goToList = this.effect((dummy$: Observable<void>) => {
     return dummy$.pipe(
       switchMap(() => {
-        return from(this.router.navigate([`users/list`]));
-      })
-    );
-  });
-  readonly goToProducts = this.effect((uid$: Observable<string>) => {
-    return uid$.pipe(
-      switchMap((uid: string) => {
-        return from(this.router.navigate([`products/list/${uid}`]));
+        return from(this.router.navigate([`products/list`]));
       })
     );
   });
