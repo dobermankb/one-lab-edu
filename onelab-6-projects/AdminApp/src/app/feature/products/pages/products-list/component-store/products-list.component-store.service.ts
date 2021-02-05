@@ -1,8 +1,9 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { Injectable } from '@angular/core';
-import { EMPTY, from, Observable, of } from 'rxjs';
-import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+
 import { ProductModel } from '@core/model/product.model';
 import { ProductService } from '@core/service/product.service';
 
@@ -53,7 +54,6 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
         return this.productService.getAllProductsOfUser$(userUid).pipe(
           tapResponse(
             products => {
-              console.log('products = ', products);
               this.setLoading(false);
               this.updateError(null);
               this.updateProducts(products);
@@ -62,6 +62,13 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
           ),
           catchError(() => of([]))
         );
+      })
+    );
+  });
+  readonly goToEditProduct = this.effect((params$: Observable<{ productUid: string, currentRoute: any }>) => {
+    return params$.pipe(
+      switchMap(({ productUid, currentRoute }) => {
+        return from(this.router.navigate([`edit/${productUid}`], { relativeTo: currentRoute }));
       })
     );
   });

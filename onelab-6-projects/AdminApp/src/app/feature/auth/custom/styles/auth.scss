@@ -44,10 +44,9 @@ $auth-form-width: 85%;
   &__text {
     width: $auth-form-width;
     margin: auto auto;
-  }
-
-  &__text--danger {
-    color: red;
+    &--danger {
+      color: red;
+    }
   }
 
   .mat-form-field {

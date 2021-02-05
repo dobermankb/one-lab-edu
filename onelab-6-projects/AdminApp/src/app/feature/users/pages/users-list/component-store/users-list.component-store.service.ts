@@ -1,10 +1,11 @@
-import { UserModel } from '@core/model/user.model';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { UserService } from '@core/service/user.service';
 import { Injectable } from '@angular/core';
 import { EMPTY, from, Observable, of } from 'rxjs';
 import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+
+import { UserService } from '@core/service/user.service';
+import { UserModel } from '@core/model/user.model';
 
 interface UsersListState {
   users: UserModel[];
@@ -46,9 +47,9 @@ export class UsersListComponentStoreService extends ComponentStore<UsersListStat
     };
   });
 
-  readonly loadUsers = this.effect((dummy$: Observable<string>) => {
+  readonly loadUsers = this.effect((dummy$: Observable<void>) => {
     return dummy$.pipe(
-      switchMap((dummy: string) => {
+      switchMap(() => {
         this.setLoading(true);
         return this.userService.getAllUsers$().pipe(
           tapResponse(
@@ -100,7 +101,7 @@ export class UsersListComponentStoreService extends ComponentStore<UsersListStat
   readonly goToEditUser = this.effect((userUid$: Observable<string>) => {
     return userUid$.pipe(
       switchMap((userUid: string) => {
-        return from(this.router.navigate([`main/user-edit/${userUid}`]));
+        return from(this.router.navigate([`users/edit/${userUid}`]));
       })
     );
   });

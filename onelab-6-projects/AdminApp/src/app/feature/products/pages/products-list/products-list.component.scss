@@ -53,18 +53,12 @@ table {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  &__bar, &__option {
+  &__bar {
+    width: 30%;
     display: inline-block;
     margin-right: 5px;
     margin-top: auto;
     margin-bottom: auto;
-  }
-  &__bar {
-    width: 30%;
-  }
-  &__option {
-    width: 10%;
-    margin-left: 5px;
   }
 }
 

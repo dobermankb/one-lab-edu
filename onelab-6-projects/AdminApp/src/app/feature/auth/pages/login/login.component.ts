@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Store } from '@ngrx/store';
+
 import { AuthenticationService } from '@core/service/authentication.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { LoginSessionUserAction } from '@core/store/session-user/session-user.action';
-import { Observable } from 'rxjs';
 import { SessionUserState } from '@core/store/session-user/session-user.state';
+import { LoginSessionUserAction } from '@core/store/session-user/session-user.action';
 import { selectErrorMsg, selectIsLoading } from '@core/store/session-user/session-user.selector';
 
 @Component({

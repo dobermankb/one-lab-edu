@@ -1,9 +1,11 @@
-import { UserModel } from '@core/model/user.model';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { UserService } from '@core/service/user.service';
 import { Injectable } from '@angular/core';
 import { EMPTY, from, Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+import { UserService } from '@core/service/user.service';
+import { UserModel } from '@core/model/user.model';
 
 enum LOADING_STATE {
   INIT,
@@ -20,7 +22,8 @@ interface UserEditState {
 
 @Injectable()
 export class UserEditComponentStoreService extends ComponentStore<UserEditState> {
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService,
+              private router: Router) {
     super({
       user: null,
       errorMsg: null,
@@ -97,6 +100,20 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
           ),
           catchError(() => of(null))
         );
+      })
+    );
+  });
+  readonly goToList = this.effect((dummy$: Observable<void>) => {
+    return dummy$.pipe(
+      switchMap(() => {
+        return from(this.router.navigate([`users/list`]));
+      })
+    );
+  });
+  readonly goToProducts = this.effect((uid$: Observable<string>) => {
+    return uid$.pipe(
+      switchMap((uid: string) => {
+        return from(this.router.navigate([`products/list/${uid}`]));
       })
     );
   });

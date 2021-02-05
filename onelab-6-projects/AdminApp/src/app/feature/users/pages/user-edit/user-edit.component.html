@@ -3,7 +3,7 @@
           mat-raised-button
           color="primary"
           type="button"
-          [routerLink]="['/main/users-list']" >
+          (click)="onNavigateToList()">
     <mat-icon>
       arrow_back
     </mat-icon>
@@ -13,8 +13,8 @@
           mat-raised-button
           color="accent"
           type="button"
-          *ngIf="userToEdit$ | async"
-          [routerLink]="['products-list']">
+          *ngIf="userToEdit$ | async; let userToEdit"
+          (click)="onNavigateToProducts(userToEdit.uid)">
     List the products of this seller
     <mat-icon>
       arrow_forward

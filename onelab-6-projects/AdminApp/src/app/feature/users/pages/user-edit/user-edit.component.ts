@@ -1,48 +1,31 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
-import { UserModel } from '@core/model/user.model';
-import { UserService } from '@core/service/user.service';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { UserModel } from '@core/model/user.model';
 import { UserEditComponentStoreService } from './component-store/user-edit.component-store.service';
+import { DestroyService } from '@shared/service/destroy.service';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
-  providers: [UserEditComponentStoreService]
+  providers: [UserEditComponentStoreService, DestroyService]
 })
 export class UserEditComponent implements OnInit, OnDestroy {
   private readonly MAX_LENGTH = 50;
   userEditForm?: FormGroup;
-  userToEdit$: Observable<UserModel | null | undefined>;
+
+  userToEdit$ = this.userEditStore.user$;
   isLoading$ = this.userEditStore.isLoading$;
   errorMsg$ = this.userEditStore.errorMsg$;
   successMsg$ = this.userEditStore.successMsg$;
-  sub = new Subscription();
 
   constructor(private activatedRoute: ActivatedRoute,
               private userEditStore: UserEditComponentStoreService,
-              private formBuilder: FormBuilder) {
-    this.userEditStore.loadUser(this.activatedRoute.snapshot.paramMap.get('uid') || '');
-    this.userToEdit$ = this.userEditStore.user$;
-    this.sub.add(this.userToEdit$.subscribe(user => {
-      if (user) {
-        this.userEditForm = this.formBuilder.group(
-          {
-            uid: [user.uid, [Validators.required]],
-            role: [user.role, [Validators.required]],
-            status: [user.status, [Validators.required]],
-            fullName: [user.fullName, [Validators.maxLength(this.MAX_LENGTH)]],
-            username: [user.username, [Validators.maxLength(this.MAX_LENGTH)]],
-            phoneNumber: [user.phoneNumber,
-              [Validators.pattern('^([\\s]*)(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
-            shopName: [user.shopName, [Validators.maxLength(this.MAX_LENGTH)]],
-          }
-        );
-      }
-    }));
+              private formBuilder: FormBuilder,
+              private destroyService$: DestroyService) {
   }
 
   get role(): AbstractControl | null | undefined {
@@ -69,9 +52,26 @@ export class UserEditComponent implements OnInit, OnDestroy {
     return this.userEditForm?.get('shopName');
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userEditStore.loadUser(this.activatedRoute.snapshot.paramMap.get('userUid') || '');
+    this.userToEdit$.pipe(takeUntil(this.destroyService$)).subscribe(user => {
+      if (user) {
+        this.userEditForm = this.formBuilder.group(
+          {
+            uid: [user.uid, [Validators.required]],
+            role: [user.role, [Validators.required]],
+            status: [user.status, [Validators.required]],
+            fullName: [user.fullName, [Validators.maxLength(this.MAX_LENGTH)]],
+            username: [user.username, [Validators.maxLength(this.MAX_LENGTH)]],
+            phoneNumber: [user.phoneNumber,
+              [Validators.pattern('^([\\s]*)(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
+            shopName: [user.shopName, [Validators.maxLength(this.MAX_LENGTH)]],
+          }
+        );
+      }
+    });
+  }
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
     this.userEditForm?.reset();
   }
   onSubmit(): void {
@@ -79,5 +79,11 @@ export class UserEditComponent implements OnInit, OnDestroy {
       return;
     }
     this.userEditStore.setUser(this.userEditForm?.getRawValue() as UserModel);
+  }
+  onNavigateToList(): void {
+    this.userEditStore.goToList();
+  }
+  onNavigateToProducts(uid: string): void {
+    this.userEditStore.goToProducts(uid);
   }
 }

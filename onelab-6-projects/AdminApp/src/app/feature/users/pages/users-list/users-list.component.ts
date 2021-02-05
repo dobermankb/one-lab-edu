@@ -1,17 +1,19 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
 
-import { UserModel } from '@core/model/user.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+
+import { UserModel } from '@core/model/user.model';
 import { UsersListComponentStoreService } from './component-store/users-list.component-store.service';
+import { DestroyService } from '@shared/service/destroy.service';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss'],
-  providers: [UsersListComponentStoreService]
+  providers: [UsersListComponentStoreService, DestroyService]
 })
 export class UsersListComponent implements OnInit, OnDestroy {
   readonly pageSize = 10;
@@ -26,7 +28,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.paginator = mp;
     this.setDataSourceAttributes();
   }
-  sub = new Subscription();
   filterInput = '';
   filterSelection = {
     role: ['admin', 'seller'],
@@ -47,14 +48,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource<UserModel>([]);
 
-  constructor(private usersListStore: UsersListComponentStoreService) {
-    this.usersListStore.loadUsers('dummy');
-
-    this.sub.add(this.users$.subscribe(users => {
-      this.setDataSourceAttributes();
-      this.dataSource.data = users;
-    }));
-  }
+  constructor(private usersListStore: UsersListComponentStoreService,
+              private destroyService$: DestroyService) {}
 
   applyFilter(): void {
     this.dataSource.filter = JSON.stringify({
@@ -63,11 +58,16 @@ export class UsersListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.usersListStore.loadUsers();
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.users$.pipe(takeUntil(this.destroyService$)).subscribe(users => {
+      this.setDataSourceAttributes();
+      this.dataSource.data = users;
+    });
   }
+
+  ngOnDestroy(): void {}
 
   statusToggle(element: UserModel): void {
     element.status = !element.status;

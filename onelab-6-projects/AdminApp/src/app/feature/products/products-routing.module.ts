@@ -1,38 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UsersListComponent } from './pages/users-list/users-list.component';
 import { MainGuard } from '@core/guard/main.guard';
-import { UserEditComponent } from './pages/user-edit/user-edit.component';
-import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 import { ProductsListComponent } from './pages/products-list/products-list.component';
+import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'products-list'
+    redirectTo: 'list'
   },
   {
     path: '',
     children: [
       {
-        path: 'users-list',
-        canActivate: [MainGuard],
-        data: {
-          accessRoles: ['admin']
-        },
-        component: UsersListComponent
-      },
-      {
-        path: 'user-edit/:uid',
-        canActivate: [MainGuard],
-        data: {
-          accessRoles: ['admin']
-        },
-        component: UserEditComponent
-      },
-      {
-        path: 'product-edit/:uid',
+        path: 'edit/:productUid',
         canActivate: [MainGuard],
         data: {
           accessRoles: ['admin', 'seller']
@@ -40,7 +22,15 @@ const routes: Routes = [
         component: ProductEditComponent
       },
       {
-        path: 'user-edit/:uid/products-list',
+        path: 'list/:userUid/edit/:productUid',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin']
+        },
+        component: ProductEditComponent
+      },
+      {
+        path: 'list/:userUid',
         canActivate: [MainGuard],
         data: {
           accessRoles: ['admin']
@@ -48,7 +38,7 @@ const routes: Routes = [
         component: ProductsListComponent
       },
       {
-        path: 'products-list',
+        path: 'list',
         canActivate: [MainGuard],
         data: {
           accessRoles: ['admin', 'seller']
@@ -63,6 +53,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MainRoutingModule {
-  constructor() {}
-}
+export class ProductsRoutingModule { }

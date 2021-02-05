@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ProductModel } from '@core/model/product.model';
+import { ProductInternalModel } from '@core/model/product_internal.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +24,23 @@ export class ProductService {
 
   getAllProductsOfUser$(userUid: string): Observable<ProductModel[]> {
     return this.firebaseFirestore.collection<ProductModel>('products',
-        ref => ref.where('usersUid', 'array-contains', userUid)).valueChanges().pipe(
+        ref => ref.where('userUid', '==', userUid)).valueChanges().pipe(
       take(1),
       catchError(error => of([] as ProductModel[]))
     );
   }
 
   getProduct$ = (uid: string) => this.firebaseFirestore.doc<ProductModel>(`products/${uid}`).valueChanges()
+    .pipe(
+      take(1),
+      catchError(error => {
+        return of(null);
+      })
+    )
+
+  getProductInternal$ = (barcode: string) =>
+    this.firebaseFirestore.collection<ProductInternalModel>(`products_internal/`,
+        ref => ref.where('barcode', '==', barcode)).valueChanges()
     .pipe(
       take(1),
       catchError(error => {

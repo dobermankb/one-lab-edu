@@ -20,14 +20,14 @@ export class SidenavComponent implements OnInit {
 
   navigationRoutes = [
     {
-      path: 'products-list',
+      path: '/products/list',
       displayName: 'My products',
-      exactPath: false,
+      exactPath: true,
       accessRoles: ['seller', 'admin'],
       icon: 'list'
     },
     {
-      path: 'users-list',
+      path: '/users/list',
       displayName: 'All users',
       exactPath: true,
       accessRoles: ['admin'],

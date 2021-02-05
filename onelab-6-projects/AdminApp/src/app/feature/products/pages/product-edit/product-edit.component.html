@@ -1,0 +1,54 @@
+<div class="editform editform__container" *ngIf="productEditForm">
+  <form class="form-group" [formGroup]="productEditForm" (ngSubmit)="onSubmit()">
+    <h2>Edit product</h2>
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" autocomplete="off">
+      <mat-error *ngIf="name?.touched && name?.invalid">
+        <span *ngIf="name?.errors?.maxlength">This name is too long. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>imageUrl</mat-label>
+      <input matInput formControlName="imageUrl" autocomplete="off">
+      <mat-error *ngIf="imageUrl?.touched && imageUrl?.invalid">
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput
+             formControlName="price"
+             type="tel"
+             autocomplete="off">
+      <mat-error *ngIf="price?.touched && price?.invalid">
+        <span *ngIf="price?.errors?.pattern">This price is invalid </span>
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" autocomplete="off">
+      <mat-error *ngIf="description?.touched && description?.invalid">
+        <span *ngIf="description?.errors?.maxlength">This shop name is too long. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <button class="editform__button"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="productEditForm.invalid || (isLoading$ | async)">
+      Save
+      <mat-icon *ngIf="isLoading$ | async">
+        <mat-spinner color="accent" diameter="20"></mat-spinner>
+      </mat-icon>
+    </button>
+    <p class="editform__text editform__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+    <p class="editform__text editform__text--successful fade-in mat-body" *ngIf="successMsg$ | async; let successfulMsg">{{ successfulMsg }}</p>
+  </form>
+</div>

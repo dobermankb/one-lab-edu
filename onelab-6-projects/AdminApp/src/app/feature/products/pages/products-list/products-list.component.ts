@@ -1,22 +1,24 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProductsListComponentStoreService } from './component-store/products-list.component-store.service';
-import { Store } from '@ngrx/store';
-import { SessionUserState } from '@core/store/session-user/session-user.state';
-import { selectSessionUser } from '@core/store/session-user/session-user.selector';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
+
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserModel } from '@core/model/user.model';
+
+import { Store } from '@ngrx/store';
+
+import { ProductsListComponentStoreService } from './component-store/products-list.component-store.service';
+import { DestroyService } from '@shared/service/destroy.service';
 import { ProductModel } from '@core/model/product.model';
+import { SessionUserState } from '@core/store/session-user/session-user.state';
+import { selectSessionUser } from '@core/store/session-user/session-user.selector';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
-  providers: [ProductsListComponentStoreService]
+  providers: [ProductsListComponentStoreService, DestroyService]
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
 
@@ -42,29 +44,12 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   ];
   dataSource = new MatTableDataSource<ProductModel>([]);
   filterInput = '';
-  sub = new Subscription();
-  uidToEdit = this.activatedRoute.snapshot.paramMap.get('uid');
+  uidToEdit = this.activatedRoute.snapshot.paramMap.get('userUid');
   products$ = this.productsListStore.products$;
   constructor(private activatedRoute: ActivatedRoute,
               private productsListStore: ProductsListComponentStoreService,
-              private sessionUserStore: Store<SessionUserState>) {
-    if (!this.uidToEdit) {
-      this.sub.add(sessionUserStore.select(selectSessionUser)
-        .pipe(filter(sessionUser => !!sessionUser))
-        .subscribe(sessionUser => {
-        if (sessionUser) {
-          this.uidToEdit = sessionUser.uid;
-          this.productsListStore.loadProductsOfUser(this.uidToEdit);
-        }
-      }));
-    } else {
-      console.log('uidToEdit', this.uidToEdit);
-      this.productsListStore.loadProductsOfUser(this.uidToEdit);
-    }
-    this.sub.add(this.products$.subscribe(products => {
-      this.setDataSourceAttributes();
-      this.dataSource.data = products;
-    }));
+              private sessionUserStore: Store<SessionUserState>,
+              private destroyService$: DestroyService) {
   }
 
   applyFilter(): void {
@@ -72,12 +57,27 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    if (!this.uidToEdit) {
+      this.sessionUserStore.select(selectSessionUser)
+        .pipe(
+          filter(sessionUser => !!sessionUser),
+          takeUntil(this.destroyService$)
+        ).subscribe(sessionUser => {
+        if (sessionUser) {
+          this.uidToEdit = sessionUser.uid;
+          this.productsListStore.loadProductsOfUser(this.uidToEdit);
+        }
+      });
+    } else {
+      this.productsListStore.loadProductsOfUser(this.uidToEdit);
+    }
+    this.products$.pipe(takeUntil(this.destroyService$)).subscribe(products => {
+      this.setDataSourceAttributes();
+      this.dataSource.data = products;
+    });
   }
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   private setDataSourceAttributes(): void {
     this.dataSource.paginator = this.paginator ? this.paginator : null;
@@ -92,6 +92,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   onEdit(element: ProductModel): void {
-    alert(element);
+    this.productsListStore.goToEditProduct({ productUid: element.uid, currentRoute: this.activatedRoute });
   }
 }
