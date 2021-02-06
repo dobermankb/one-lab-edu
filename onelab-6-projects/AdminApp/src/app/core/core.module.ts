@@ -8,13 +8,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { SessionUserEffect } from '@core/store/session-user/session-user.effect';
 import { RouterModule } from '@angular/router';
-import { reducers } from '@core/store';
+import { effects, reducers } from '@core/store';
 import { MainGuard } from '@core/guard/main.guard';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { NavigationActionTiming, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { environment } from '@env';
 import { LayoutModule } from '@core/layout/layout.module';
+import { CustomSerializer } from '@core/store/router/router.state';
 
 @NgModule({
   declarations: [
@@ -28,10 +28,11 @@ import { LayoutModule } from '@core/layout/layout.module';
     AngularFireAuthModule,
 
     StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([
-      SessionUserEffect
-    ]),
+    StoreRouterConnectingModule.forRoot({
+      serializer: CustomSerializer,
+      navigationActionTiming: NavigationActionTiming.PostActivation,
+    }),
+    EffectsModule.forRoot(effects),
     LayoutModule
   ],
   providers: [

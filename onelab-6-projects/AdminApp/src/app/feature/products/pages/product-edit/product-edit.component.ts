@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
 
-
 import { DestroyService } from '@shared/service/destroy.service';
 import { ProductEditComponentStoreService } from './component-store/product-edit.component-store.service';
 import { SessionUserState } from '@core/store/session-user/session-user.state';
 import { ProductModel } from '@core/model/product.model';
+import { getCurrentRouteState } from '@core/store/router/router.selector';
+import { RootState } from '@core/store';
+import { RouterStateUrl } from '@core/store/router/router.state';
 
 @Component({
   selector: 'app-product-edit',
@@ -16,7 +18,7 @@ import { ProductModel } from '@core/model/product.model';
   styleUrls: ['./product-edit.component.scss'],
   providers: [ProductEditComponentStoreService, DestroyService]
 })
-export class ProductEditComponent implements OnInit {
+export class ProductEditComponent implements OnInit, OnDestroy {
   private readonly MAX_LENGTH = 50;
 
   productEditForm?: FormGroup;
@@ -30,9 +32,22 @@ export class ProductEditComponent implements OnInit {
               private sessionStore: Store<SessionUserState>,
               private productEditStore: ProductEditComponentStoreService,
               private formBuilder: FormBuilder,
-              private destroyService$: DestroyService) { }
+              private destroyService$: DestroyService,
+              private store: Store<RootState>) {
+  }
 
   ngOnInit(): void {
+    console.log('product Uid is ', this.activatedRoute.snapshot.paramMap.get('productUid'));
+    this.store.select(getCurrentRouteState).pipe(takeUntil(this.destroyService$)).subscribe(
+      (routeStateUnknown: unknown) => {
+        console.log('product-edit component, routeState = ', routeStateUnknown);
+        const routeState = routeStateUnknown as RouterStateUrl;
+        const { url, params, queryParams } = routeState;
+        console.log('params = ', params);
+        console.log('url = ', url);
+        console.log('queryParams = ', queryParams);
+      }
+    );
     this.productEditStore.loadProduct(this.activatedRoute.snapshot.paramMap.get('productUid') || '');
     this.productToEdit$.pipe(takeUntil(this.destroyService$)).subscribe(
       product => {
@@ -54,6 +69,10 @@ export class ProductEditComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.productEditForm?.reset();
   }
 
   get name(): AbstractControl | null | undefined {

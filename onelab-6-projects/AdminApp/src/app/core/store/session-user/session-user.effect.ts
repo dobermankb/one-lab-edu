@@ -95,13 +95,6 @@ export class SessionUserEffect implements OnInitEffects {
     { dispatch: false }
     );
 
-  // logActions$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     tap(action => {
-  //       // console.log('|EFFECTS LOGGER|', action);
-  //     }),
-  //   ), { dispatch: false });
-
   constructor(
     private actions$: Actions,
     private authService: AuthenticationService,

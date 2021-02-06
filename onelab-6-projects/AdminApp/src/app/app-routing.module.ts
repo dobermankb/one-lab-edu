@@ -39,6 +39,7 @@ const routes: Routes = [
   {
     path: 'auth',
     canActivate: [AngularFireAuthGuard, MainGuard],
+    canLoad: [MainGuard],
     data: {
       authGuardPipe: redirectLoggedInToProducts,
       accessRoles: null
@@ -61,6 +62,7 @@ const routes: Routes = [
     scrollPositionRestoration: 'enabled',
     onSameUrlNavigation: 'reload',
     relativeLinkResolution: 'corrected',
+    // paramsInheritanceStrategy: 'always',
     // preloadingStrategy: PreloadAllModules,
     // enableTracing: true
   })],
