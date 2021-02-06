@@ -1,12 +1,25 @@
 <div class="container">
   <h2 class="list__title text-center">The list of all products</h2>
   <hr>
-  <div class="filter">
-    <mat-form-field class="filter__bar" appearance="outline">
-      <mat-icon matSuffix>search</mat-icon>
-      <input class="filter__input" matInput [(ngModel)]="filterInput"
-             (keyup)="applyFilter()" placeholder="Filter" autocomplete="off">
-    </mat-form-field>
+  <div class="upper__container">
+    <div class="filter">
+      <mat-form-field class="filter__bar" appearance="outline">
+        <mat-icon matSuffix>search</mat-icon>
+        <input class="filter__input" matInput [(ngModel)]="filterInput"
+               (keyup)="applyFilter()" placeholder="Filter" autocomplete="off">
+      </mat-form-field>
+    </div>
+    <div class="create__wrapper">
+      <button class="create__button"
+              mat-raised-button
+              color="accent"
+              type="button">
+        Add a new product
+        <mat-icon>
+          add_box
+        </mat-icon>
+      </button>
+    </div>
   </div>
   <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageOptions"></mat-paginator>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>

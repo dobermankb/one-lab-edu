@@ -26,10 +26,6 @@ export class RouterEffect {
     })
   ), { dispatch: false });
 
-  logger$ = createEffect(() => this.actions$.pipe(
-    tap(action => console.log('|LOGGER|', action))
-  ), { dispatch: false });
-
   constructor(
     private actions$: Actions,
     private store: Store,

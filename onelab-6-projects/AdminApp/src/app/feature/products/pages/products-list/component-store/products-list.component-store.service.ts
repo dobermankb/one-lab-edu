@@ -68,10 +68,15 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
       })
     );
   });
-  readonly goToEditProduct = this.effect((params$: Observable<{ productUid: string, currentRoute: any }>) => {
+  readonly goToEditProduct =
+    this.effect((params$: Observable<{ productUid: string, userUid: string | undefined }>) => {
     return params$.pipe(
-      switchMap(({ productUid, currentRoute }) => {
-        return from(this.router.navigate([`edit/${productUid}`], { relativeTo: currentRoute }));
+      switchMap(({ productUid, userUid }) => {
+        if (!!userUid) {
+          return from(this.router.navigate([`products/list/${userUid}/edit/${productUid}`]));
+        } else {
+          return from(this.router.navigate([`products/list/edit/${productUid}`]));
+        }
       })
     );
   });

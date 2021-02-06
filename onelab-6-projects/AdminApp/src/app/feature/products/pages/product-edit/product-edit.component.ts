@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 
 import { DestroyService } from '@shared/service/destroy.service';
 import { ProductEditComponentStoreService } from './component-store/product-edit.component-store.service';
-import { SessionUserState } from '@core/store/session-user/session-user.state';
 import { ProductModel } from '@core/model/product.model';
 import { getCurrentRouteState } from '@core/store/router/router.selector';
 import { RootState } from '@core/store';
@@ -22,34 +20,39 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   private readonly MAX_LENGTH = 50;
 
   productEditForm?: FormGroup;
+  userUid?: string;
 
   productToEdit$ = this.productEditStore.product$;
   isLoading$ = this.productEditStore.isLoading$;
   errorMsg$ = this.productEditStore.errorMsg$;
   successMsg$ = this.productEditStore.successMsg$;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private sessionStore: Store<SessionUserState>,
-              private productEditStore: ProductEditComponentStoreService,
+  constructor(private productEditStore: ProductEditComponentStoreService,
               private formBuilder: FormBuilder,
               private destroyService$: DestroyService,
               private store: Store<RootState>) {
   }
 
   ngOnInit(): void {
-    console.log('product Uid is ', this.activatedRoute.snapshot.paramMap.get('productUid'));
-    this.store.select(getCurrentRouteState).pipe(takeUntil(this.destroyService$)).subscribe(
+    this.store.select(getCurrentRouteState).pipe(
+      takeUntil(this.destroyService$)
+    ).subscribe(
       (routeStateUnknown: unknown) => {
-        console.log('product-edit component, routeState = ', routeStateUnknown);
         const routeState = routeStateUnknown as RouterStateUrl;
-        const { url, params, queryParams } = routeState;
-        console.log('params = ', params);
-        console.log('url = ', url);
-        console.log('queryParams = ', queryParams);
+        const { productUid, userUid } = routeState.params;
+        if (!!productUid) {
+          this.productEditStore.loadProduct(productUid);
+        }
+        if (!!userUid) {
+          this.userUid = userUid;
+        }
       }
     );
-    this.productEditStore.loadProduct(this.activatedRoute.snapshot.paramMap.get('productUid') || '');
-    this.productToEdit$.pipe(takeUntil(this.destroyService$)).subscribe(
+    this.productToEdit$.pipe(
+      filter(product => !!product),
+      distinctUntilChanged(),
+      takeUntil(this.destroyService$)
+    ).subscribe(
       product => {
         if (product) {
           this.productEditForm = this.formBuilder.group(
@@ -95,7 +98,10 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     if (this.productEditForm?.invalid) {
       return;
     }
-    // console.log(this.productEditForm?.getRawValue() as ProductModel);
     this.productEditStore.setProduct(this.productEditForm?.getRawValue() as ProductModel);
+  }
+
+  onNavigateToList(): void {
+    this.productEditStore.goToList(this.userUid);
   }
 }

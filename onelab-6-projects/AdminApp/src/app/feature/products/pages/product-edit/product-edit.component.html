@@ -1,3 +1,16 @@
+<div class="quick-navigation">
+  <button class="quick-navigation__button"
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="onNavigateToList()"
+          [disabled]="!userUid">
+    <mat-icon>
+      arrow_back
+    </mat-icon>
+    Go back to the list of all products
+  </button>
+</div>
 <div class="editform editform__container" *ngIf="productEditForm">
   <form class="form-group" [formGroup]="productEditForm" (ngSubmit)="onSubmit()">
     <h2>Edit product</h2>

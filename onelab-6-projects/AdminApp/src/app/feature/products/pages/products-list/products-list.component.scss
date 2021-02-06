@@ -1,3 +1,19 @@
+.quick-navigation {
+  margin-top: 5px;
+  display: inline-flex;
+  flex-flow: row wrap;
+  align-items: center;
+  &__button {
+    &:nth-child(odd) {
+      margin-left: 0;
+      margin-right: auto;
+    }
+    &:nth-child(even) {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+}
 .container {
   padding: 15px;
 }
@@ -50,11 +66,13 @@ table {
 
 .filter {
   margin-top: 2rem;
+  width: 50%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
+  align-items: center;
   &__bar {
-    width: 30%;
+    width: 60%;
     display: inline-block;
     margin-right: 5px;
     margin-top: auto;
@@ -62,7 +80,26 @@ table {
   }
 }
 
-.createuser__button {
-  float: right;
+.create__wrapper {
+  display: flex;
 }
+
+.upper {
+  &__container {
+    display: flex;
+  }
+}
+
+.create {
+  &__wrapper {
+    display: flex;
+    width: 50%;
+  }
+  &__button {
+    display: inline-block;
+    margin: auto 0 auto auto;
+  }
+}
+
+
 

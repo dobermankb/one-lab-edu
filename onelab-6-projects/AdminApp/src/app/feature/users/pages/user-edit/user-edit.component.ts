@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserModel } from '@core/model/user.model';
 import { UserEditComponentStoreService } from './component-store/user-edit.component-store.service';
 import { DestroyService } from '@shared/service/destroy.service';
+import { Store } from '@ngrx/store';
+import { RootState } from '@core/store';
+import { getCurrentRouteState } from '@core/store/router/router.selector';
+import { RouterStateUrl } from '@core/store/router/router.state';
 
 @Component({
   selector: 'app-user-edit',
@@ -22,7 +25,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   errorMsg$ = this.userEditStore.errorMsg$;
   successMsg$ = this.userEditStore.successMsg$;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private store: Store<RootState>,
               private userEditStore: UserEditComponentStoreService,
               private formBuilder: FormBuilder,
               private destroyService$: DestroyService) {
@@ -53,7 +56,17 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userEditStore.loadUser(this.activatedRoute.snapshot.paramMap.get('userUid') || '');
+    this.store.select(getCurrentRouteState).pipe(
+      takeUntil(this.destroyService$)
+    ).subscribe(
+      (routeStateUnknown: unknown) => {
+        const routeState = routeStateUnknown as RouterStateUrl;
+        const { userUid } = routeState.params;
+        if (!!userUid) {
+          this.userEditStore.loadUser(userUid);
+        }
+      }
+    );
     this.userToEdit$.pipe(takeUntil(this.destroyService$)).subscribe(user => {
       if (user) {
         this.userEditForm = this.formBuilder.group(

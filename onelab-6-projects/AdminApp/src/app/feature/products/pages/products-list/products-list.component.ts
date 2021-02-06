@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -13,6 +12,9 @@ import { DestroyService } from '@shared/service/destroy.service';
 import { ProductModel } from '@core/model/product.model';
 import { SessionUserState } from '@core/store/session-user/session-user.state';
 import { selectSessionUser } from '@core/store/session-user/session-user.selector';
+import { RootState } from '@core/store';
+import { getCurrentRouteState } from '@core/store/router/router.selector';
+import { RouterStateUrl } from '@core/store/router/router.state';
 
 @Component({
   selector: 'app-products-list',
@@ -44,11 +46,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   ];
   dataSource = new MatTableDataSource<ProductModel>([]);
   filterInput = '';
-  uidToEdit = this.activatedRoute.snapshot.paramMap.get('userUid');
+  uidToEdit?: string;
   products$ = this.productsListStore.products$;
-  constructor(private activatedRoute: ActivatedRoute,
-              private productsListStore: ProductsListComponentStoreService,
+  constructor(private productsListStore: ProductsListComponentStoreService,
               private sessionUserStore: Store<SessionUserState>,
+              private store: Store<RootState>,
               private destroyService$: DestroyService) {
   }
 
@@ -57,20 +59,31 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!this.uidToEdit) {
-      this.sessionUserStore.select(selectSessionUser)
-        .pipe(
+    this.store.select(getCurrentRouteState).pipe(
+      map(routeStateUnknown => {
+        const routeState = routeStateUnknown as unknown as RouterStateUrl;
+        const { userUid } = routeState.params;
+        return userUid as string | undefined;
+      }),
+      withLatestFrom(
+        this.sessionUserStore.select(selectSessionUser).pipe(
           filter(sessionUser => !!sessionUser),
-          takeUntil(this.destroyService$)
-        ).subscribe(sessionUser => {
-        if (sessionUser) {
-          this.uidToEdit = sessionUser.uid;
+          take(1)
+        )
+      ),
+      takeUntil(this.destroyService$)
+    ).subscribe(
+      ([userUid, sessionUser]) => {
+        if (!!userUid) {
+          this.uidToEdit = userUid;
           this.productsListStore.loadProductsOfUser(this.uidToEdit);
+        } else if (!!sessionUser) {
+          this.uidToEdit = undefined;
+          this.productsListStore.loadProductsOfUser(sessionUser.uid);
         }
-      });
-    } else {
-      this.productsListStore.loadProductsOfUser(this.uidToEdit);
-    }
+      }
+    );
+
     this.products$.pipe(takeUntil(this.destroyService$)).subscribe(products => {
       this.setDataSourceAttributes();
       this.dataSource.data = products;
@@ -92,6 +105,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   onEdit(element: ProductModel): void {
-    this.productsListStore.goToEditProduct({ productUid: element.uid, currentRoute: this.activatedRoute });
+    this.productsListStore.goToEditProduct({ productUid: element.uid, userUid: this.uidToEdit });
   }
 }

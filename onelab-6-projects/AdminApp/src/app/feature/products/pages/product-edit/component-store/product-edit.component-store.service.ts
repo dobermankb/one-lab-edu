@@ -106,10 +106,14 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
       })
     );
   });
-  readonly goToList = this.effect((dummy$: Observable<void>) => {
-    return dummy$.pipe(
-      switchMap(() => {
-        return from(this.router.navigate([`products/list`]));
+  readonly goToList = this.effect((userUid$: Observable<string | undefined>) => {
+    return userUid$.pipe(
+      switchMap((userUid?: string) => {
+        if (!!userUid) {
+          return from(this.router.navigate([`products/list/${userUid}`]));
+        } else {
+          return from(this.router.navigate([`products/list`]));
+        }
       })
     );
   });

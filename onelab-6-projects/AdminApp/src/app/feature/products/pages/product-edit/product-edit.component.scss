@@ -1,7 +1,7 @@
 .quick-navigation {
   margin-top: 15px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
   &__button {
     &:nth-child(odd) {
