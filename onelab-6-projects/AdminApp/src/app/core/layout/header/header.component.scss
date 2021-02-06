@@ -1,0 +1,23 @@
+.main-header {
+  position: fixed;
+  overflow: visible;
+  top: 0;
+  width: 100%;
+  height: 64px;
+  z-index: 666;
+  &__title {
+    margin-right: auto;
+  }
+  &__profile {
+    display: block;
+    margin-left: auto;
+  }
+  &__logout {
+    display: block;
+    margin-left: 5px;
+  }
+}
+
+.fixed-wrapper {
+  height: 64px;
+}

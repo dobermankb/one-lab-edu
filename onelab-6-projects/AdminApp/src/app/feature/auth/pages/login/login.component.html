@@ -1,0 +1,41 @@
+<div class="background"></div>
+
+<div class="auth mat-typography">
+  <div class="fade-in auth__container">
+    <div class="auth__wrapper" *ngIf="loginForm">
+      <form class="form-group auth__form" [formGroup]="loginForm" (ngSubmit)="login()">
+        <h2 class="auth__title mat-h2">Login</h2>
+
+        <mat-form-field class="mat-form-field" appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput formControlName="email" autocomplete="off" required>
+          <mat-error *ngIf="email?.touched && email?.invalid">
+            <span *ngIf="email?.errors?.required">This field is mandatory. </span>
+            <span *ngIf="email?.errors?.email">This email is invalid. </span>
+            <span *ngIf="email?.errors?.maxlength">This email is too long. </span>
+          </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field class="mat-form-field" appearance="outline">
+          <mat-label> Password
+          </mat-label>
+          <input matInput formControlName="password" type="password" required>
+          <mat-error *ngIf="password?.touched && password?.invalid">
+            <span *ngIf="password?.errors?.required">This field is mandatory. </span>
+            <span *ngIf="password?.errors?.minlength">This password is too short. </span>
+            <span *ngIf="password?.errors?.maxlength">This password is too long. </span>
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || (isLoading$ | async)">
+          Sign in
+          <mat-icon *ngIf="isLoading$ | async">
+            <mat-spinner color="accent" diameter="20"></mat-spinner>
+          </mat-icon>
+        </button>
+        <p class="auth__text auth__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+      </form>
+    </div>
+  </div>
+</div>

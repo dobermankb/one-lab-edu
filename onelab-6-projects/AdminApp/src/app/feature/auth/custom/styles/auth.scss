@@ -1,0 +1,71 @@
+$auth-form-width: 85%;
+
+.background {
+  position: fixed;
+  min-width: 100%;
+  min-height: 200%;
+  height: auto;
+  width: auto;
+  z-index: -1;
+  background-image: url("/assets/blurry-background.png");
+  background-size: cover;
+}
+
+.fade-in {
+  animation: 1s fade-in ease-out;
+}
+
+.auth {
+  &__container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    padding: 15px;
+    text-align: center;
+  }
+
+  &__wrapper {
+    min-width: 30%;
+    height: auto;
+    border-radius: 1rem;
+    padding: 1.3rem;
+    margin: auto auto;
+    box-shadow: inset 0.1rem 0.1rem 1rem 1rem rgba(255, 255, 255, 0.4),
+                0.1rem 0.1rem 2rem 0.1rem lightpink,
+                inset 0.05rem 0.05rem 0.6rem 0.25rem lightskyblue;
+    background-color: rgba(220, 220, 220, 0.7);
+  }
+
+  &__title {
+    color: darkslateblue;
+    text-align: center;
+  }
+
+  &__text {
+    width: $auth-form-width;
+    margin: auto auto;
+  }
+
+  &__text--danger {
+    color: red;
+  }
+
+  .mat-form-field {
+    display: block;
+    width: $auth-form-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  button {
+    width: $auth-form-width;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

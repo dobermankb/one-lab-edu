@@ -1,0 +1,65 @@
+<div class="container">
+  <h2 class="list__title text-center">The list of all products</h2>
+  <hr>
+  <div class="filter">
+    <mat-form-field class="filter__bar" appearance="outline">
+      <mat-icon matSuffix>search</mat-icon>
+      <input class="filter__input" matInput [(ngModel)]="filterInput"
+             (keyup)="applyFilter()" placeholder="Filter" autocomplete="off">
+    </mat-form-field>
+  </div>
+  <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="pageOptions"></mat-paginator>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Barcode Column -->
+    <ng-container matColumnDef="barcode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Barcode </th>
+      <td mat-cell *matCellDef="let element"> {{element.barcode}} </td>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container matColumnDef="image">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+      <td mat-cell *matCellDef="let element"> {{element.imageUrl}} </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef > Actions </th>
+      <td mat-cell *matCellDef="let element">
+
+        <button mat-mini-fab
+                color="primary"
+                (click)="onEdit(element)"
+                aria-label="Edit user">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator (page)="syncPrimaryPaginator($event)"
+                 [pageSize]="paginator?.pageSize || pageSize" [pageIndex]="paginator?.pageIndex || 0"
+                 [length]="paginator?.length || 0" [pageSizeOptions]="paginator?.pageSizeOptions || pageOptions"></mat-paginator>
+</div>
