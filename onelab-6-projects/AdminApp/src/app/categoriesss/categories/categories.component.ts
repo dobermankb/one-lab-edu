@@ -35,7 +35,7 @@ export class CategoriesComponent implements OnInit {
   checked = false;
   constructor(public db:AngularFirestore, private dialog: MatDialog, private _snackBar: MatSnackBar) { 
     this.categoriesCol=this.db.collection('categories');
-    //this.post=this.db.collection('categories',ref => ref.where('parent', '==', "none"));
+    this.post=this.db.collection('categories',ref => ref.where('parent', '==', "none"));
   }
 
   ngOnInit(): void {     
