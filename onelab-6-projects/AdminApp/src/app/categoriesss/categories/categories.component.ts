@@ -24,19 +24,18 @@ export class CategoriesComponent implements OnInit {
   last3:number=1000;
   selected:any="";
   categoriesCol:AngularFirestoreCollection<Category>;
-  category:Observable<Category[]>;
   orderedcategory:any;
   orderedcategory1:any;
   categories:any;
   post:AngularFirestoreCollection<Category>;
-  newcategoryid:AngularFirestoreCollection<Category>;
   name1:string="";
   name2:string="";
   name3:string="";
   parent:string="";
   checked = false;
   constructor(public db:AngularFirestore, private dialog: MatDialog, private _snackBar: MatSnackBar) { 
-
+    this.categoriesCol=this.db.collection('categories');
+    //this.post=this.db.collection('categories',ref => ref.where('parent', '==', "none"));
   }
 
   ngOnInit(): void {     
@@ -83,7 +82,9 @@ export class CategoriesComponent implements OnInit {
    update(event:any,id:any){
      if (event){
        console.log(event);
-     this.db.collection("categories").doc(id).update({ cheched:true });
+     this.db.collection("categories").doc(id).update({ cheched:true }).then(()=>{
+       console.log(true);
+     });
      }
      else{
       this.db.collection("categories").doc(id).update({ cheched:false });
@@ -100,8 +101,8 @@ export class CategoriesComponent implements OnInit {
     this.openSnackBar("Вы добавили  категорию второго уровня",this.name2);
 
    }
-   addCategory3(parent:any){
-    this.db.collection("categories").add({name:this.name3,parent:parent, level:3});
+   addCategory3(parent:any, name:string){
+    this.db.collection("categories").add({name:name,parent:parent, level:3});
     this.name3="";
     this.openSnackBar("Вы добавили  категорию третьего уровня",this.name3 );
    }

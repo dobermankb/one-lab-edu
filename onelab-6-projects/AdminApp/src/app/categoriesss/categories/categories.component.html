@@ -1,6 +1,6 @@
 <div >
     <h3>Изменение категории товаров</h3>
-    <p>Добавить в основную категорию </p>
+    <p class="main">Добавить в основную категорию </p>
     <div class="left">
         <div class="addCategory1">
             <input type="text" placeholder="type category name" name="name1" [(ngModel)]="name1">
@@ -44,8 +44,8 @@
         <p> {{x.data.name + " " }}
         <button mat-stroked-button color="primary" (click)="openDialog(x.id, x.data.name)"><mat-icon>delete</mat-icon>{{" "}}</button>
           
-        <input type="text" placeholder="Добавить внутренную категорию" name="name3" [(ngModel)]="name3">
-            <button  mat-raised-button color="primary" (click)="addCategory3(x.id)">+</button></p>
+        <input type="text" placeholder="Добавить внутренную категорию" name="name3" #name3>
+            <button  mat-raised-button color="primary" (click)="addCategory3(x.id, name3.value)">+</button></p>
         <ul *ngFor="let y of x.children | async">
             <li><mat-checkbox (change)="update($event.checked,y.id)"> {{y.data.name + " "}}
             <button mat-stroked-button color="primary" (click)="openDialog(y.id, y.data.name)"><mat-icon>delete</mat-icon></button>
