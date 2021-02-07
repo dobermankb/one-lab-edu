@@ -1,0 +1,24 @@
+<mat-sidenav-container>
+  <mat-sidenav class="sidenav"
+               role="navigation"
+               mode="side"
+               [fixedInViewport]="true"
+               [fixedTopGap]="64"
+               opened>
+    <mat-nav-list class="sidenav_list" *ngFor="let list_item of navigationRoutes">
+      <a mat-list-item
+         class="sidenav__link"
+         [routerLink]="[list_item.path]"
+         [routerLinkActiveOptions]="{ exact: list_item.exactPath }"
+         routerLinkActive="sidenav__link--active"
+         *ngIf="list_item.accessRoles.includes((sessionUser$ | async)?.role || '')">
+        <mat-icon matPrefix>{{ list_item.icon }}</mat-icon>
+        <span> {{ list_item.displayName }} </span>
+        <mat-icon matSuffix>arrow_right</mat-icon>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,15 @@
+<mat-toolbar class="main-header" color="primary">
+  <h2 class="main-header__title">{{ (isAdmin$ | async) ? 'Admin' : 'Seller' }} dashboard</h2>
+<!--  <button mat-raised-button class="main-header__profile" color="accent" disabled>-->
+<!--    <mat-icon>account_box</mat-icon>-->
+<!--    My Profile-->
+<!--  </button>-->
+  <button class="main-header__logout" mat-raised-button color="warn" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Sign out
+    <mat-icon *ngIf="isLoading$ | async">
+      <mat-spinner color="accent" diameter="20"></mat-spinner>
+    </mat-icon>
+  </button>
+</mat-toolbar>
+<div class="fixed-wrapper"></div>

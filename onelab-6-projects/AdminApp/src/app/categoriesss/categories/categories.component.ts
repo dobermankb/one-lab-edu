@@ -19,9 +19,6 @@ interface Category{
 })
 export class CategoriesComponent implements OnInit {
   myControl = new FormControl();
-  last1:number=0;
-  last2:number=100;
-  last3:number=1000;
   selected:any="";
   categoriesCol:AngularFirestoreCollection<Category>;
   orderedcategory:any;
@@ -30,7 +27,6 @@ export class CategoriesComponent implements OnInit {
   post:AngularFirestoreCollection<Category>;
   name1:string="";
   name2:string="";
-  name3:string="";
   parent:string="";
   checked = false;
   constructor(public db:AngularFirestore, private dialog: MatDialog, private _snackBar: MatSnackBar) { 
@@ -82,33 +78,33 @@ export class CategoriesComponent implements OnInit {
    update(event:any,id:any){
      if (event){
        console.log(event);
-     this.db.collection("categories").doc(id).update({ cheched:true }).then(()=>{
-       console.log(true);
-     });
+     this.db.collection("categories").doc(id).update({ cheched:true });
      }
      else{
       this.db.collection("categories").doc(id).update({ cheched:false });
      }
    }
-   addCategory1(){
-    this.db.collection("categories").add({name:this.name1,parent:"none", level:1});
-    this.name1="";
-    this.openSnackBar("Вы добавили категорию первого уровня", this.name1);
+   addCategory1(name:string){
+    this.db.collection("categories").add({name:name,parent:"none", level:1});
+    this.openSnackBar("Вы добавили категорию первого уровня", name);
    }
-   addCategory2(){
-    this.db.collection("categories").add({name:this.name2,parent:this.parent, level:2});
-    this.name2="";
-    this.openSnackBar("Вы добавили  категорию второго уровня",this.name2);
+   addCategory2(name:string){
+    this.db.collection("categories").add({name:name,parent:this.parent, level:2});
+    this.openSnackBar("Вы добавили  категорию второго уровня",name);
 
    }
    addCategory3(parent:any, name:string){
     this.db.collection("categories").add({name:name,parent:parent, level:3});
-    this.name3="";
-    this.openSnackBar("Вы добавили  категорию третьего уровня",this.name3 );
+    this.openSnackBar("Вы добавили  категорию третьего уровня",name);
+    name="";
    }
    delete(id:any){
      this.db.doc('categories/'+id).delete();
    }
+   keyDownFunction(event:any) {
+    if (event.keyCode === 13) {
+    }
+  }
    openDialog(id:any,name:string) {
     const dialogRef = this.dialog.open(ConfirmationDialog,{
       data:{

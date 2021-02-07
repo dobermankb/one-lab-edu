@@ -5,13 +5,12 @@
 }
 .category{
     text-decoration:solid;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
 }
 .selected{
-    position: absolute;
-    right:250px;
-    top:100px;
+    float:right; 
+    width:800px;
 }
 .addCategory1{
     position: relative;
@@ -30,11 +29,32 @@ h3{
 }
 input {
     height: 32px;
-    border: black 1px solid;
+    border: white 1px solid;
+    width:250px;
 }
 .left{
+    float:left;
     width:500px;
 }
-p.main{
-    margin-left:40px;
+.list__title {
+    font-weight: bold;
+  }
+  
+.text-center {
+    text-align: center;
+}
+.container {
+    padding: 15px;
+  }
+.left_text{
+    position: relative;
+    left:40px;
+}
+.subcategory{
+    font-size: 18px;
+}
+.form{
+    display:inline;
+    margin:0px;
+    padding:0px;
 }
