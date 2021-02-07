@@ -1,0 +1,100 @@
+<div class="quick-navigation">
+  <button class="quick-navigation__button"
+          mat-raised-button
+          color="primary"
+          type="button"
+          [routerLink]="['/main/users-list']" >
+    <mat-icon>
+      arrow_back
+    </mat-icon>
+    Go back to the list of all users
+  </button>
+  <button class="quick-navigation__button"
+          mat-raised-button
+          color="accent"
+          type="button"
+          *ngIf="userToEdit$ | async"
+          [routerLink]="['products-list']">
+    List the products of this seller
+    <mat-icon>
+      arrow_forward
+    </mat-icon>
+  </button>
+</div>
+<div class="editform editform__container" *ngIf="userEditForm">
+  <form class="form-group" [formGroup]="userEditForm" (ngSubmit)="onSubmit()">
+    <h2>Edit user</h2>
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fullName" autocomplete="off">
+      <mat-error *ngIf="fullName?.touched && fullName?.invalid">
+        <span *ngIf="fullName?.errors?.maxlength">This name is too long. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" autocomplete="off">
+      <mat-error *ngIf="username?.touched && username?.invalid">
+        <span *ngIf="username?.errors?.maxlength">This username is too long. </span>
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Phone number</mat-label>
+      <input matInput
+             formControlName="phoneNumber"
+             type="tel"
+             autocomplete="off">
+      <mat-error *ngIf="phoneNumber?.touched && phoneNumber?.invalid">
+        <span *ngIf="phoneNumber?.errors?.pattern">This phone number is invalid </span>
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Shop name</mat-label>
+      <input matInput formControlName="shopName" autocomplete="off">
+      <mat-error *ngIf="shopName?.touched && shopName?.invalid">
+        <span *ngIf="shopName?.errors?.maxlength">This shop name is too long. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select color="primary" formControlName="status" required>
+        <mat-option [value]="false">Inactive</mat-option>
+        <mat-option [value]="true">Active</mat-option>
+      </mat-select>
+      <mat-error *ngIf="status?.touched && status?.invalid">
+        <span *ngIf="status?.errors?.required">This field is mandatory. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline">
+      <mat-label>Role</mat-label>
+      <mat-select color="primary" formControlName="role" required>
+        <mat-option [value]="'admin'">admin</mat-option>
+        <mat-option [value]="'seller'">seller</mat-option>
+      </mat-select>
+      <mat-error *ngIf="role?.touched && role?.invalid">
+        <span *ngIf="role?.errors?.required">This field is mandatory. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <button class="editform__button"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="userEditForm.invalid || (isLoading$ | async)">
+      Save
+      <mat-icon *ngIf="isLoading$ | async">
+        <mat-spinner color="accent" diameter="20"></mat-spinner>
+      </mat-icon>
+    </button>
+    <p class="editform__text editform__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+    <p class="editform__text editform__text--successful fade-in mat-body" *ngIf="successMsg$ | async; let successfulMsg">{{ successfulMsg }}</p>
+  </form>
+</div>

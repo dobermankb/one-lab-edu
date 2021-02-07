@@ -1,0 +1,18 @@
+.sidenav {
+  background-color: #e4e4e4;
+  &__title {
+    text-align: center;
+    font-weight: bold;
+    padding: 15px 15px 0 15px;
+  }
+  &__link {
+    &--active {
+      color: snow;
+      background-color: grey;
+      &:link, &:visited,
+      &:hover, &:active {
+        background-color: darkgray;
+      }
+    }
+  }
+}

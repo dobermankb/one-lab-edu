@@ -1,0 +1,33 @@
+$nf__font-size: 10vw;
+$nf__margin: 2vw;
+
+.notfound {
+  padding: $nf__font-size;
+  width: 100%;
+  text-align: center;
+  &__title {
+    font-size: $nf__font-size;
+    line-height: $nf__font-size;
+    font-weight: bold;
+  }
+  &__subtitle {
+    margin-top: $nf__margin;
+    font-size: $nf__font-size / 2;
+    line-height: $nf__font-size / 2;
+    font-weight: normal;
+  }
+  &__text, &__link {
+    display: inline-block;
+    margin-top: $nf__margin;
+    font-size: $nf__font-size / 4;
+    line-height: $nf__font-size / 4;
+    font-weight: lighter;
+  }
+
+  &__link:link, &__link:visited {
+    text-decoration: none;
+  }
+  &__link:hover, &__link:active {
+    text-decoration: underline;
+  }
+}

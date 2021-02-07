@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "authentification-one-lab": {
+      "hosting": {
+        "AdminApp": [
+          "authentification-one-lab"
+        ]
+      }
+    }
+  }
+}
