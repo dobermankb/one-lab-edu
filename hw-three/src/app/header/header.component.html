@@ -1,0 +1,26 @@
+<div class="app-nav">
+    <div class="container-fluid">
+      <div class="logo-container">
+        <a [routerLink]="['/categories']">
+          <h2 class="logo__title">Homework 3</h2>
+        </a>
+      </div>
+      <div class="navigation-container">
+        
+      </div>
+      <div class="log-container">
+        <ul>
+          <!-- <li>
+            <a href="#" class="nav__link">Sign In</a>
+          </li> -->
+          <li *ngIf="!authService.isAuthorized()">
+            <a [routerLink]="['/login']" class="sign-up">Log In</a>
+          </li>
+          
+          <li *ngIf="authService.isAuthorized()">
+            <a  class="nav_link">Hello {{authService.user.username}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>

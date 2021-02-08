@@ -1,0 +1,220 @@
+
+a{
+    text-decoration: none;
+}
+.header{
+    overflow: hidden;
+    background-color: wheat;
+    padding: 20px 10px;
+    
+}
+
+.header__nav{
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    line-height: 25px;
+    border-radius: 4px;
+    font-size: 18px;
+    float: right;
+    
+  }
+
+  .header__logo{
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    line-height: 25px;
+    border-radius: 4px;
+    font-size: 25px;
+    font-weight: bold;
+    float: left;
+  }
+
+
+/* Wrapper */
+.wrapper{
+    width: 500px;
+    margin: 0 auto;
+}
+
+footer{
+    width: 500px;
+    margin: 0 auto;
+}
+
+/*SVG smiley */
+.svg{
+    margin: 0 auto;
+}
+
+/* Robot */
+
+.robot {
+    animation: MoveUpDown 4s linear infinite;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    
+  }
+  
+  @keyframes MoveUpDown {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-400px);
+    }
+  }
+
+/* Bubbles */
+  
+.bubbles { 
+    border-radius: 100%; 
+} 
+
+.bubbles span { 
+
+    position: absolute; 
+    display: block; 
+    border: 5px; 
+    border-radius: 50%; 
+    animation: animate 3s ease-in-out infinite; 
+
+} 
+
+
+@keyframes animate { 
+    0% { 
+        transform: translateY(-300px); 
+    } 
+
+    50% { 
+        transform: translateY(190px); 
+        width: -100px; 
+        height: +100px; 
+
+    } 
+
+    100% { 
+        transform: translateY(-300px); 
+    } 
+} 
+
+
+.bubbles span:nth-child(1) { 
+    top: 300px; 
+    left: 250px; 
+    height: 160px; 
+    width: 160px; 
+    background-color: red; 
+    opacity: 0.7; 
+    animation-delay: 0.3s; 
+    animation-direction: reverse; 
+} 
+
+.bubbles span:nth-child(2) { 
+    top: 310px; 
+    left: 400px; 
+    height: 190px; 
+    width: 190px; 
+    background-color: yellow; 
+    opacity: 0.9; 
+    animation-delay: 0.3s; 
+    animation-direction: reverse; 
+    animation-duration: 2.3s; 
+} 
+
+.bubbles span:nth-child(3) { 
+    top: 300px; 
+    left: 700px; 
+    height: 140px; 
+    width: 140px; 
+    background-color: rgb(184, 65, 65) ;
+    opacity: 0.9; 
+    animation-delay: 0.5s; 
+    animation-direction: reverse; 
+    animation-duration: 2.6s; 
+} 
+
+.bubbles span:nth-child(4) { 
+    top: 300px; 
+    left: 1080px; 
+    height: 200px; 
+    width: 200px; 
+    background-color: rgb(102, 72, 17); 
+    opacity: 0.9; 
+    animation-delay: 0.7s; 
+    animation-direction: reverse; 
+    animation-duration: 2.3s; 
+} 
+
+.bubbles span:nth-child(5) { 
+    top: 300px; 
+    left: 1280px; 
+    height: 200px; 
+    width: 200px; 
+    background-color: purple; 
+    opacity: 0.9; 
+    animation-delay: 0.9s; 
+    animation-direction: reverse; 
+    animation-duration: 2.3s; 
+} 
+
+.bubbles span:nth-child(6) { 
+    top: 400px; 
+    left: 980px; 
+    height: 200px; 
+    width: 200px; 
+    background-color: green; 
+    opacity: 0.5; 
+    animation-delay: 0.75s; 
+    animation-direction: reverse; 
+    animation-duration: 3.3s; 
+} 
+
+.bubbles span:nth-child(7) { 
+    top: 350px; 
+    left: 880px; 
+    height: 200px; 
+    width: 200px; 
+    background-color: aqua; 
+    opacity: 0.7; 
+    animation-delay: 0.98s; 
+    animation-direction: reverse; 
+    animation-duration: 1.3s; 
+} 
+
+/* Progress bar */
+
+.line { 
+    height: 20px;
+    position: relative;
+    background: #312d24;
+    overflow: hidden;
+}
+
+.line span {
+    display: block;
+    height: 100%;
+}
+
+.progress {
+    background-color: green;
+    animation: progressBar 5s ease-in-out;
+    -webkit-animation-fill-mode:both; 
+    -moz-animation: progressBar 3s ease-in-out;
+    animation-fill-mode:both; 
+}
+
+@keyframes progressBar {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+@-moz-keyframes progressBar {
+  0% { width: 0; }
+  100% { width: 100%; }
+}

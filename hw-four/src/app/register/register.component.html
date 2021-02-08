@@ -1,0 +1,63 @@
+<form [formGroup]="loginForm">
+    <label>
+        Name:
+        <input type="text" formControlName="name">
+        <span class="error" *ngIf="name.invalid && name.touched">Name is required</span>
+
+    </label>
+    <label>
+        Surname:
+        <input type="text" formControlName="surname">
+        <span class="error" *ngIf="surname.invalid && surname.touched">Surname is required</span>
+
+    </label>
+    <label>
+        Age:
+        <input type="text" formControlName="age">
+        <span class="error" *ngIf="age.invalid && age.touched">Age is required</span>
+
+    </label>
+    <label>
+        Date of birth:
+        <input type="text" formControlName="dateOfBirth">
+        <span class="error" *ngIf="dateOfBirth.invalid && dateOfBirth.touched">Date of birth is required</span>
+
+    </label>
+    <label>
+        E-mail:
+        <input type="text" formControlName="email">
+        <span class="error" *ngIf="email.invalid && email.touched">E-mail is required</span>
+
+    </label>
+    <label>
+        Country:
+        <input type="text" formControlName="country">
+        <span class="error" *ngIf="country.invalid && country.touched">Country is required</span>
+
+    </label>
+    <label>
+        City:
+        <input type="text" formControlName="city">
+        <span class="error" *ngIf="city.invalid && city.touched">City is required</span>
+
+    </label>
+    <label>
+        Address:
+        <input type="text" formControlName="address">
+        <span class="error" *ngIf="address.invalid && addresstouched">Address is required</span>
+
+    </label>
+    <label>
+        Zip:
+        <input type="text" formControlName="zip">
+        <span class="error" *ngIf="zip.invalid && zip.touched">ZIP is required</span>
+
+    </label>
+    <label>
+        Phone:
+        <input type="text" formControlName="phone">
+        <span class="error" *ngIf="phone.invalid && phone.touched">Phone is required</span>
+
+    </label>
+    <button>Submit</button>
+</form>
