@@ -1,0 +1,68 @@
+<div class="container">
+    <h2 class="list__title text-center">Изменение категории товаров</h2>
+    <hr>
+    <div class="left">
+    <p class="left_text">Добавить в основную категорию </p>
+        <div class="addCategory1">
+          <form (keydown)="keyDownFunction($event)">
+            <input type="text" placeholder="type category name" name="name1" #name1>
+            <button mat-raised-button color="accent" (click)="addCategory1(name1.value); name1.value=''" >+</button>
+                </form>
+            </div>
+    <table style="table-layout: fixed ; width: 100%;" *ngFor="let category of categories | async" class="categories">
+      <tr class="category main" *ngIf="category.data.parent==='none'">
+        <td>
+        <a (mouseenter)="showSubCategories(category.data.name,category.id)"> {{category.data.name + " " }}</a></td>
+        <td>
+        <button mat-stroked-button color="primary" (click)="openDialog(category.id, category.data.name )"><mat-icon>delete</mat-icon></button>
+        </td>
+        </tr>
+    </table>
+    </div>
+  <!--
+    <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>Number</mat-label>
+          <input type="text"
+                 placeholder="Pick one"
+                 aria-label="Number"
+                 matInput
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of(categories | async)?.name" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+-->  
+    <div class="selected">
+        <p>Добавить в <em>{{selected}}</em></p>
+        <form (keydown)="keyDownFunction($event)">
+        <input type="text" placeholder="type subcategory name" name="name2" #name2>
+    <button  mat-raised-button color="accent" (click)="addCategory2(name2.value); name2.value=''">+</button>
+    </form>
+   <ul *ngFor="let x of orderedcategory | async" class="categories list">
+    <li >
+        <div class="subcategory"> {{x.data.name + " " }}
+        <button mat-stroked-button color="primary" (click)="openDialog(x.id, x.data.name)"><mat-icon>delete</mat-icon>{{" "}}</button>
+        <form class="form" (keydown)="keyDownFunction($event)">
+        <input type="text" placeholder="Добавить внутренную категорию" name="name3" #name3 onfocus="this.value=''">
+            <button  mat-raised-button color="primary" (click)="addCategory3(x.id, name3.value); name3.value=''">+</button>
+          </form>
+        </div>
+        <ul *ngFor="let y of x.children | async">
+            <li><mat-checkbox (change)="update($event.checked,y.id)"> {{y.data.name + " "}}
+            <button mat-stroked-button color="primary" (click)="openDialog(y.id, y.data.name)"><mat-icon>delete</mat-icon></button>
+            
+            </mat-checkbox>
+            </li>
+        </ul>
+    
+
+</li>
+   </ul>        
+   </div>
+</div>
+
