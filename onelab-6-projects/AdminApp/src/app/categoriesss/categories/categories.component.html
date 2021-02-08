@@ -53,14 +53,14 @@
           </form>
         </div>
         <ul *ngFor="let y of x.children | async">
-            <li><mat-checkbox (change)="update($event.checked,y.id)"> {{y.data.name + " "}}
+            <li><mat-checkbox [checked]="y.data.checked" (change)="update($event.checked,y.id)"> {{y.data.name + " "}}
             <button mat-stroked-button color="primary" (click)="openDialog(y.id, y.data.name)"><mat-icon>delete</mat-icon></button>
             
             </mat-checkbox>
             </li>
         </ul>
-    
-
+        <p class="popular">Обновить популярные категории 
+        <button class="border_button" mat-button color="warn" (click)="updateAll()"><mat-icon>update</mat-icon></button></p>
 </li>
    </ul>        
    </div>

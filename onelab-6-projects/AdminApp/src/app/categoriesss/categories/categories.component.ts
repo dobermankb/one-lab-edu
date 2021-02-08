@@ -10,7 +10,14 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface Category{
   name:string,
-  parent:string
+  parent:string,
+  checked:boolean
+}
+export class Checked{
+  constructor(public checked:boolean, public id:string){
+    checked=checked;
+    id:id;
+  }
 }
 @Component({
   selector: 'app-categories',
@@ -25,13 +32,12 @@ export class CategoriesComponent implements OnInit {
   orderedcategory1:any;
   categories:any;
   post:AngularFirestoreCollection<Category>;
-  name1:string="";
-  name2:string="";
   parent:string="";
-  checked = false;
+  checked_categories:Checked[];
   constructor(public db:AngularFirestore, private dialog: MatDialog, private _snackBar: MatSnackBar) { 
     this.categoriesCol=this.db.collection('categories');
     this.post=this.db.collection('categories',ref => ref.where('parent', '==', "none"));
+    this.checked_categories=[];
   }
 
   ngOnInit(): void {     
@@ -75,26 +81,33 @@ export class CategoriesComponent implements OnInit {
   
       ));   
    }
-   update(event:any,id:any){
-     if (event){
-       console.log(event);
-     this.db.collection("categories").doc(id).update({ cheched:true });
-     }
-     else{
-      this.db.collection("categories").doc(id).update({ cheched:false });
-     }
+   update(event:boolean,id:string){
+     const el=new Checked(event,id);
+     this.checked_categories.push(el);
+   }
+   updateAll(){
+     this.checked_categories.map(async (el) => {
+       if (el.checked){
+        await this.db.collection("categories").doc(el.id).update({ checked:true });
+       } 
+       else{
+        await this.db.collection("categories").doc(el.id).update({ checked:false });
+       }
+       this.openSnackBar("Вы обновили популярные категории","");
+     })
+
    }
    addCategory1(name:string){
-    this.db.collection("categories").add({name:name,parent:"none", level:1});
+    this.db.collection("categories").add({name:name,parent:"none", level:1, checked:false});
     this.openSnackBar("Вы добавили категорию первого уровня", name);
    }
    addCategory2(name:string){
-    this.db.collection("categories").add({name:name,parent:this.parent, level:2});
+    this.db.collection("categories").add({name:name,parent:this.parent, level:2, checked:false});
     this.openSnackBar("Вы добавили  категорию второго уровня",name);
 
    }
    addCategory3(parent:any, name:string){
-    this.db.collection("categories").add({name:name,parent:parent, level:3});
+    this.db.collection("categories").add({name:name,parent:parent, level:3, checked:false});
     this.openSnackBar("Вы добавили  категорию третьего уровня",name);
     name="";
    }
