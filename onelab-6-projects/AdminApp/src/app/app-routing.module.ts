@@ -5,17 +5,17 @@ import { MainGuard } from '@core/guard/main.guard';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { MainLayoutComponent } from '@core/layout/main-layout/main-layout.component';
 
-const redirectLoggedInToMain = () => redirectLoggedInTo(['main']);
+const redirectLoggedInToProducts = () => redirectLoggedInTo(['products']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'main'
+    redirectTo: 'products'
   },
   {
-    path: 'main',
+    path: 'products',
     component: MainLayoutComponent,
     canActivate: [AngularFireAuthGuard, MainGuard],
     canLoad: [MainGuard],
@@ -23,13 +23,25 @@ const routes: Routes = [
       authGuardPipe: redirectUnauthorizedToLogin,
       accessRoles: ['admin', 'seller']
     },
-    loadChildren: () => import('./feature/main/main.module').then(m => m.MainModule)
+    loadChildren: () => import('./feature/products/products.module').then(m => m.ProductsModule)
+  },
+  {
+    path: 'users',
+    component: MainLayoutComponent,
+    canActivate: [AngularFireAuthGuard, MainGuard],
+    canLoad: [MainGuard],
+    data: {
+      authGuardPipe: redirectUnauthorizedToLogin,
+      accessRoles: ['admin', 'seller']
+    },
+    loadChildren: () => import('./feature/users/users.module').then(m => m.UsersModule)
   },
   {
     path: 'auth',
     canActivate: [AngularFireAuthGuard, MainGuard],
+    canLoad: [MainGuard],
     data: {
-      authGuardPipe: redirectLoggedInToMain,
+      authGuardPipe: redirectLoggedInToProducts,
       accessRoles: null
     },
     loadChildren: () => import('./feature/auth/auth.module').then(m => m.AuthModule)
@@ -49,6 +61,8 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
     scrollPositionRestoration: 'enabled',
     onSameUrlNavigation: 'reload',
+    relativeLinkResolution: 'corrected',
+    // paramsInheritanceStrategy: 'always',
     // preloadingStrategy: PreloadAllModules,
     // enableTracing: true
   })],

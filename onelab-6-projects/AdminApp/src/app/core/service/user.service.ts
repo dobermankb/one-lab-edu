@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { UserModel } from '@core/model/user.model';
-import { catchError, finalize, shareReplay, take, tap } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({

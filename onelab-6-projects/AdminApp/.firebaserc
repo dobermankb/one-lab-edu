@@ -1,9 +1,9 @@
 {
   "targets": {
-    "authentification-one-lab": {
+    "onetech-project": {
       "hosting": {
         "AdminApp": [
-          "authentification-one-lab"
+          "onetech-project"
         ]
       }
     }
