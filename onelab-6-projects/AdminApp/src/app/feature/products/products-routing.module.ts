@@ -22,6 +22,15 @@ const routes: Routes = [
         component: ProductsListComponent,
       },
       {
+        path: 'add',
+        canActivate: [MainGuard],
+        canLoad: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        loadChildren: () => import('./pages/product-add/product-add.module').then(m => m.ProductAddModule)
+      },
+      {
         path: 'edit/:productUid',
         canActivate: [MainGuard],
         data: {
@@ -45,6 +54,15 @@ const routes: Routes = [
         },
         component: ProductsListComponent
       },
+      {
+        path: ':userUid/add',
+        canActivate: [MainGuard],
+        canLoad: [MainGuard],
+        data: {
+          accessRoles: ['admin']
+        },
+        loadChildren: () => import('./pages/product-add/product-add.module').then(m => m.ProductAddModule)
+      }
     ]
   }
 ];

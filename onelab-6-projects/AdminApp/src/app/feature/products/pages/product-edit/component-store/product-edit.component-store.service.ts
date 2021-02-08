@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 
 import { ProductModel } from '@core/model/product.model';
 import { ProductService } from '@core/service/product.service';
+import { CategoryModel } from '@core/model/Category.model';
+import { CategoryService } from '@core/service/category.service';
 
 enum LOADING_STATE {
   INIT,
@@ -15,6 +17,7 @@ enum LOADING_STATE {
 
 interface ProductEditState {
   product?: ProductModel | null;
+  categories: CategoryModel[];
   loadingState: LOADING_STATE;
   errorMsg?: string | null;
   successMsg?: string | null;
@@ -23,14 +26,17 @@ interface ProductEditState {
 @Injectable()
 export class ProductEditComponentStoreService extends ComponentStore<ProductEditState> {
   constructor(private productService: ProductService,
+              private categoryService: CategoryService,
               private router: Router) {
     super({
       product: null,
       errorMsg: null,
       successMsg: null,
+      categories: [],
       loadingState: LOADING_STATE.INIT
     });
   }
+  readonly categories$: Observable<CategoryModel[]> = this.select(state => state.categories);
   readonly product$: Observable<ProductModel | null | undefined> = this.select(state => state.product);
   readonly isLoading$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADING);
   readonly isLoaded$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADED);
@@ -65,6 +71,40 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
     };
   });
 
+  readonly updateCategories = this.updater((state: ProductEditState, categories: CategoryModel[]) => {
+    return {
+      ...state,
+      categories
+    };
+  });
+
+  readonly loadAllLeafCategories = this.effect((dummy$: Observable<void>) => {
+    return dummy$.pipe(
+      switchMap(() => {
+        this.setLoading(LOADING_STATE.LOADING);
+        this.updateSuccessMsg(null);
+        return this.categoryService.getAllLeafCategories().pipe(
+          tapResponse(
+            categories => {
+              this.setLoading(LOADING_STATE.LOADED);
+              this.updateError(null);
+              this.updateCategories(categories);
+            },
+            (error) => {
+              this.setLoading(LOADING_STATE.LOADED);
+              this.updateError(String(error));
+            }
+          ),
+          catchError(() => {
+            this.setLoading(LOADING_STATE.LOADED);
+            return of([]);
+          })
+        );
+      })
+    );
+  });
+
+
   readonly loadProduct = this.effect((productUid$: Observable<string>) => {
     return productUid$.pipe(
       switchMap((productUid: string) => {
@@ -76,9 +116,15 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
               this.updateError(null);
               this.updateProduct(product);
             },
-            (error) => this.updateError(String(error))
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(LOADING_STATE.LOADED);
+            }
           ),
-          catchError(() => EMPTY)
+          catchError(() => {
+            this.setLoading(LOADING_STATE.LOADED);
+            return of(null);
+          })
         );
       })
     );
@@ -101,7 +147,10 @@ export class ProductEditComponentStoreService extends ComponentStore<ProductEdit
               this.updateError(String(error));
             }
           ),
-          catchError(() => of(null))
+          catchError(() => {
+            this.setLoading(LOADING_STATE.LOADED);
+            return of(null);
+          })
         );
       })
     );

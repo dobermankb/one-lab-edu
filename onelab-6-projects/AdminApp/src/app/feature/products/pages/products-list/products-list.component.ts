@@ -39,7 +39,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   displayedColumns = [
     'name',
     'barcode',
-    'image',
+    'category',
     'price',
     'description',
     'actions'
@@ -47,6 +47,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<ProductModel>([]);
   filterInput = '';
   uidToEdit?: string;
+  sessionUserUid?: string;
   products$ = this.productsListStore.products$;
   constructor(private productsListStore: ProductsListComponentStoreService,
               private sessionUserStore: Store<SessionUserState>,
@@ -79,6 +80,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
           this.productsListStore.loadProductsOfUser(this.uidToEdit);
         } else if (!!sessionUser) {
           this.uidToEdit = undefined;
+          this.sessionUserUid = sessionUser.uid;
           this.productsListStore.loadProductsOfUser(sessionUser.uid);
         }
       }
@@ -106,5 +108,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   onEdit(element: ProductModel): void {
     this.productsListStore.goToEditProduct({ productUid: element.uid, userUid: this.uidToEdit });
+  }
+  onDelete(element: ProductModel): void {
+    this.productsListStore.deleteProduct(element);
+  }
+  onAdd(): void {
+    this.productsListStore.goToAddProduct({userUid: this.uidToEdit});
   }
 }

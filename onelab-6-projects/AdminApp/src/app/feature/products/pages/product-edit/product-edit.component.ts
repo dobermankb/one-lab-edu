@@ -22,6 +22,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   productEditForm?: FormGroup;
   userUid?: string;
 
+  categories$ = this.productEditStore.categories$;
   productToEdit$ = this.productEditStore.product$;
   isLoading$ = this.productEditStore.isLoading$;
   errorMsg$ = this.productEditStore.errorMsg$;
@@ -34,6 +35,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.productEditStore.loadAllLeafCategories();
     this.store.select(getCurrentRouteState).pipe(
       takeUntil(this.destroyService$)
     ).subscribe(
@@ -59,10 +61,10 @@ export class ProductEditComponent implements OnInit, OnDestroy {
             {
               uid: [product.uid, [Validators.required]],
               userUid: [product.userUid, [Validators.required]],
-              categoryUid: [product.categoryUid, [Validators.required]],
+              categoryNames: [product.categoryNames, [Validators.nullValidator]],
               barcode: [product.barcode, [Validators.required]],
               name: [product.name, [Validators.required, Validators.maxLength(this.MAX_LENGTH)]],
-              imageUrl: [product.imageUrl, [Validators.required]],
+              imageUrl: [product.imageUrl, [Validators.nullValidator]],
               price: [product.price, [
                 Validators.required,
                 Validators.pattern('^([\\d]*[,.]?[\\d]*)$')]],
@@ -92,6 +94,10 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   get description(): AbstractControl | null | undefined {
     return this.productEditForm?.get('description');
+  }
+
+  get categoryNames(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('categoryNames');
   }
 
   onSubmit(): void {

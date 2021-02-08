@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ProductModel } from '@core/model/product.model';
@@ -38,16 +38,14 @@ export class ProductService {
       })
     )
 
-  getProductInternal$ = (barcode: string) =>
-    this.firebaseFirestore.collection<ProductInternalModel>(`products_internal/`,
-        ref => ref.where('barcode', '==', barcode)).valueChanges()
-    .pipe(
-      take(1),
-      catchError(error => {
-        return of(null);
-      })
-    )
-
   setProduct = (productModel: ProductModel) =>
     this.firebaseFirestore.doc<ProductModel>(`products/${productModel.uid}`).set(productModel)
+
+  addProduct = (productModel: ProductModel) =>
+    this.firebaseFirestore.collection<ProductModel>(`products`).add(productModel)
+      .then(docRef => {
+        return this.setProduct({ ...productModel, uid: docRef.id });
+      })
+  deleteProduct = (productModel: ProductModel) =>
+    this.firebaseFirestore.doc<ProductModel>(`products/${productModel.uid}`).delete()
 }

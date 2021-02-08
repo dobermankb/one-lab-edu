@@ -4,8 +4,10 @@ import { EMPTY, from, Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { UserService } from '@core/service/user.service';
-import { UserModel } from '@core/model/user.model';
+import { ProductModel } from '@core/model/product.model';
+import { ProductService } from '@core/service/product.service';
+import { CategoryModel } from '@core/model/Category.model';
+import { CategoryService } from '@core/service/category.service';
 
 enum LOADING_STATE {
   INIT,
@@ -13,68 +15,70 @@ enum LOADING_STATE {
   LOADED
 }
 
-interface UserEditState {
-  user?: UserModel | null;
+interface ProductAddState {
+  categories: CategoryModel[];
   loadingState: LOADING_STATE;
   errorMsg?: string | null;
   successMsg?: string | null;
 }
 
 @Injectable()
-export class UserEditComponentStoreService extends ComponentStore<UserEditState> {
-  constructor(private userService: UserService,
+export class ProductAddComponentStoreService extends ComponentStore<ProductAddState> {
+  constructor(private productService: ProductService,
+              private categoryService: CategoryService,
               private router: Router) {
     super({
-      user: null,
+      categories: [],
       errorMsg: null,
       successMsg: null,
       loadingState: LOADING_STATE.INIT
     });
   }
-  readonly user$: Observable<UserModel | null | undefined> = this.select(state => state.user);
+  readonly categories$: Observable<CategoryModel[]> = this.select(state => state.categories);
   readonly isLoading$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADING);
   readonly isLoaded$: Observable<boolean> = this.select(state => state.loadingState === LOADING_STATE.LOADED);
   readonly errorMsg$: Observable<string | null | undefined> = this.select(state => state.errorMsg);
   readonly successMsg$: Observable<string | null | undefined> = this.select(state => state.successMsg);
 
-  readonly updateError = this.updater((state: UserEditState, errorMsg: string | null | undefined) => {
+  readonly updateError = this.updater((state: ProductAddState, errorMsg: string | null | undefined) => {
     return {
       ...state,
       errorMsg
     };
   });
 
-  readonly updateSuccessMsg = this.updater((state: UserEditState, successMsg: string | null | undefined) => {
+  readonly updateSuccessMsg = this.updater((state: ProductAddState, successMsg: string | null | undefined) => {
     return {
       ...state,
       successMsg
     };
   });
 
-  readonly setLoading = this.updater((state: UserEditState, loadingState: LOADING_STATE) => {
+  readonly setLoading = this.updater((state: ProductAddState, loadingState: LOADING_STATE) => {
     return {
       ...state,
       loadingState
     };
   });
 
-  readonly updateUser = this.updater((state: UserEditState, user: UserModel | null | undefined) => {
+  readonly updateCategories = this.updater((state: ProductAddState, categories: CategoryModel[]) => {
     return {
       ...state,
-      user
+      categories
     };
   });
 
-  readonly loadUser = this.effect((userUid$: Observable<string>) => {
-    return userUid$.pipe(
-      switchMap((userUid: string) => {
+  readonly loadAllLeafCategories = this.effect((dummy$: Observable<void>) => {
+    return dummy$.pipe(
+      switchMap(() => {
         this.setLoading(LOADING_STATE.LOADING);
-        return this.userService.getUser$(userUid).pipe(
+        this.updateSuccessMsg(null);
+        return this.categoryService.getAllLeafCategories().pipe(
           tapResponse(
-            user => {
+            categories => {
               this.setLoading(LOADING_STATE.LOADED);
               this.updateError(null);
-              this.updateUser(user);
+              this.updateCategories(categories);
             },
             (error) => {
               this.setLoading(LOADING_STATE.LOADED);
@@ -83,28 +87,28 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
           ),
           catchError(() => {
             this.setLoading(LOADING_STATE.LOADED);
-            return of(null);
+            return of([]);
           })
         );
       })
     );
   });
-  readonly setUser = this.effect((user$: Observable<UserModel>) => {
-    return user$.pipe(
-      switchMap((user: UserModel) => {
+
+  readonly addProduct = this.effect((product$: Observable<ProductModel>) => {
+    return product$.pipe(
+      switchMap((product: ProductModel) => {
         this.setLoading(LOADING_STATE.LOADING);
         this.updateSuccessMsg(null);
-        return from(this.userService.setUser(user)).pipe(
+        return from(this.productService.addProduct(product)).pipe(
           tapResponse(
             successful => {
               this.setLoading(LOADING_STATE.LOADED);
               this.updateError(null);
-              this.updateSuccessMsg('Successfully updated the user');
-              this.updateUser(user);
+              this.updateSuccessMsg('Successfully added the product');
             },
             (error) => {
-              this.updateError(String(error));
               this.setLoading(LOADING_STATE.LOADED);
+              this.updateError(String(error));
             }
           ),
           catchError(() => {
@@ -115,17 +119,14 @@ export class UserEditComponentStoreService extends ComponentStore<UserEditState>
       })
     );
   });
-  readonly goToList = this.effect((dummy$: Observable<void>) => {
-    return dummy$.pipe(
-      switchMap(() => {
-        return from(this.router.navigate([`users/list`]));
-      })
-    );
-  });
-  readonly goToProducts = this.effect((uid$: Observable<string>) => {
-    return uid$.pipe(
-      switchMap((uid: string) => {
-        return from(this.router.navigate([`products/list/${uid}`]));
+  readonly goToList = this.effect((userUid$: Observable<string | undefined>) => {
+    return userUid$.pipe(
+      switchMap((userUid?: string) => {
+        if (!!userUid) {
+          return from(this.router.navigate([`products/list/${userUid}`]));
+        } else {
+          return from(this.router.navigate([`products/list`]));
+        }
       })
     );
   });

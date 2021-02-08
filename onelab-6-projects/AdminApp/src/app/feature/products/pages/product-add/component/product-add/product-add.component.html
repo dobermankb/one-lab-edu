@@ -10,9 +10,17 @@
     Go back to the list of all products
   </button>
 </div>
-<div class="editform editform__container" *ngIf="productEditForm">
-  <form class="form-group" [formGroup]="productEditForm" (ngSubmit)="onSubmit()">
-    <h2>Edit product</h2>
+<div class="addform addform__container" *ngIf="productAddForm">
+  <form class="form-group" [formGroup]="productAddForm" (ngSubmit)="onSubmit()">
+    <h2>Add product</h2>
+
+    <mat-form-field class="addform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Barcode</mat-label>
+      <input matInput formControlName="barcode" autocomplete="off" required>
+      <mat-error *ngIf="barcode?.touched && barcode?.invalid">
+        <span *ngIf="barcode?.errors?.required">This field is mandatory. </span>
+      </mat-error>
+    </mat-form-field>
 
     <mat-form-field class="addform__selectfield mat-form-field" appearance="outline">
       <mat-label>Category</mat-label>
@@ -24,28 +32,27 @@
       </mat-error>
     </mat-form-field>
     <br>
-
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+    <mat-form-field class="addform__inputfield mat-form-field" appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" autocomplete="off">
       <mat-error *ngIf="name?.touched && name?.invalid">
-        <span *ngIf="name?.errors?.maxlength">This name is too long. </span>
         <span *ngIf="name?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="name?.errors?.maxlength">This name is too long. </span>
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+    <mat-form-field class="addform__inputfield mat-form-field" appearance="outline">
       <mat-label>Price</mat-label>
       <input matInput
              formControlName="price"
              autocomplete="off">
       <mat-error *ngIf="price?.touched && price?.invalid">
-        <span *ngIf="price?.errors?.pattern">This price is invalid </span>
         <span *ngIf="price?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="price?.errors?.pattern">This price is invalid </span>
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+    <mat-form-field class="addform__inputfield mat-form-field" appearance="outline">
       <mat-label>imageUrl</mat-label>
       <input matInput formControlName="imageUrl" autocomplete="off">
       <mat-error *ngIf="imageUrl?.touched && imageUrl?.invalid">
@@ -53,7 +60,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__textareafield mat-form-field" appearance="outline">
+    <mat-form-field class="addform__textareafield mat-form-field" appearance="outline">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" autocomplete="off"></textarea>
       <mat-error *ngIf="description?.touched && description?.invalid">
@@ -62,17 +69,17 @@
       </mat-error>
     </mat-form-field>
 
-    <button class="editform__button"
+    <button class="addform__button"
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="productEditForm.invalid || (isLoading$ | async)">
+            [disabled]="productAddForm.invalid || (isLoading$ | async)">
       Save
       <mat-icon *ngIf="isLoading$ | async">
         <mat-spinner color="accent" diameter="20"></mat-spinner>
       </mat-icon>
     </button>
-    <p class="editform__text editform__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
-    <p class="editform__text editform__text--successful fade-in mat-body" *ngIf="successMsg$ | async; let successfulMsg">{{ successfulMsg }}</p>
+    <p class="addform__text addform__text--danger fade-in mat-body" *ngIf="errorMsg$ | async; let errorMsg">{{ errorMsg }}</p>
+    <p class="addform__text addform__text--successful fade-in mat-body" *ngIf="successMsg$ | async; let successfulMsg">{{ successfulMsg }}</p>
   </form>
 </div>

@@ -1,7 +1,7 @@
 export interface ProductModel {
   uid: string;
   userUid: string;
-  categoryUid: string;
+  categoryNames: string[];
   name: string;
   barcode: string;
   imageUrl: string;

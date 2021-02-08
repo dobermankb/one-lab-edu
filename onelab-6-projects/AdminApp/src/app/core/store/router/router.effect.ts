@@ -11,7 +11,6 @@ export class RouterEffect {
 
   redirectOnCancel$ = createEffect(() => this.actions$.pipe(
     ofType(ROUTER_CANCEL),
-    tap(router => console.log(router)),
     switchMap(() => this.store.select(selectIsLoading)),
     take(1),
     filter(isLoading => !isLoading),

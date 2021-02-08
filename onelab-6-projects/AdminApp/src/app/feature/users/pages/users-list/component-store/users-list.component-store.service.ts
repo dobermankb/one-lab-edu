@@ -58,9 +58,15 @@ export class UsersListComponentStoreService extends ComponentStore<UsersListStat
               this.updateError(null);
               this.updateUsers(users);
             },
-            (error) => this.updateError(String(error))
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(false);
+            }
           ),
-          catchError(() => of([]))
+          catchError(() => {
+            this.setLoading(false);
+            return of([]);
+          })
         );
       })
     );
@@ -86,11 +92,14 @@ export class UsersListComponentStoreService extends ComponentStore<UsersListStat
                       }
                     });
                   }),
-                  catchError(error => EMPTY)
+                  catchError(error => of([]))
                 )
               );
             },
-            (error) => this.updateError(String(error))
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(false);
+            }
           ),
           catchError(() => {
             this.setLoading(false);

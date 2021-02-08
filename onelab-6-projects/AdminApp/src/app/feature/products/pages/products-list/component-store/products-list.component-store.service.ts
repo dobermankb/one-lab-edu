@@ -1,7 +1,7 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { Injectable } from '@angular/core';
 import { from, Observable, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { ProductModel } from '@core/model/product.model';
@@ -58,7 +58,10 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
               this.updateError(null);
               this.updateProducts(products);
             },
-            (error) => this.updateError(String(error))
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(false);
+            }
           ),
           catchError(() => {
             this.setLoading(false);
@@ -68,6 +71,41 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
       })
     );
   });
+
+  readonly deleteProduct = this.effect((productToDelete$: Observable<ProductModel>) => {
+    return productToDelete$.pipe(
+      switchMap((productToDelete: ProductModel) => {
+        this.setLoading(true);
+        return from(this.productService.deleteProduct(productToDelete)).pipe(
+          tapResponse(
+            successful => {
+              this.setLoading(false);
+              this.updateError(null);
+              this.updateProducts(
+                this.products$.pipe(
+                  take(1),
+                  map(products => {
+                    return products.filter(product => product.uid !== productToDelete.uid);
+                  }),
+                  catchError(error => of([]))
+                )
+              );
+            },
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(false);
+            }
+          ),
+          catchError(() => {
+            this.setLoading(false);
+            return of(null);
+          })
+        );
+      })
+    );
+  });
+
+
   readonly goToEditProduct =
     this.effect((params$: Observable<{ productUid: string, userUid: string | undefined }>) => {
     return params$.pipe(
@@ -80,4 +118,16 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
       })
     );
   });
+  readonly goToAddProduct =
+    this.effect((params$: Observable<{ userUid: string | undefined }>) => {
+      return params$.pipe(
+        switchMap(({ userUid }) => {
+          if (!!userUid) {
+            return from(this.router.navigate([`products/list/${userUid}/add`]));
+          } else {
+            return from(this.router.navigate([`products/list/add`]));
+          }
+        })
+      );
+    });
 }
