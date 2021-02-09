@@ -1,3 +1,4 @@
+import React from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Link from  'next/link';
@@ -96,12 +97,11 @@ export default function CategoryPage({products,categories}: Props){
                     }}
                     showDots={false}
                     sliderClass=""
-                    slidesToSlide={1}
+                    slidesToSlide={3}
                     swipeable
                     >
-                        {products.map((product, index) => {
-                            if(product.categoryNames.includes(category.name)) 
-                                return(
+                        {products.filter(product => product.categoryNames.includes(category.name)).map((product, index) => 
+                                (
                                     <ul>
                                         <Link href={''}>
                                             <Card className={classes.root} elevation={4} key={index}>
@@ -126,7 +126,7 @@ export default function CategoryPage({products,categories}: Props){
                                     </ul>
                                 )
                                 
-                        })}
+                        )}
                     </Carousel> 
                     </> : ''
                     }

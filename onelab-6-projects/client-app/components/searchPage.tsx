@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { loadDB } from '../lib/db'
-import {Product} from './categoryPage'
+import {Product} from '../components/categoryPage'
 import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
