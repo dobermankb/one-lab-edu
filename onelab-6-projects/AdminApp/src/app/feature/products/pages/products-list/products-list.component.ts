@@ -49,6 +49,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   uidToEdit?: string;
   sessionUserUid?: string;
   products$ = this.productsListStore.products$;
+  user$ = this.productsListStore.user$;
   constructor(private productsListStore: ProductsListComponentStoreService,
               private sessionUserStore: Store<SessionUserState>,
               private store: Store<RootState>,
@@ -78,10 +79,12 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         if (!!userUid) {
           this.uidToEdit = userUid;
           this.productsListStore.loadProductsOfUser(this.uidToEdit);
+          this.productsListStore.loadUser(this.uidToEdit);
         } else if (!!sessionUser) {
           this.uidToEdit = undefined;
           this.sessionUserUid = sessionUser.uid;
           this.productsListStore.loadProductsOfUser(sessionUser.uid);
+          this.productsListStore.loadUser(sessionUser.uid);
         }
       }
     );

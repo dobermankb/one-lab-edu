@@ -17,6 +17,7 @@ import { MatOptionModule } from '@angular/material/core';
 
 import { UsersListComponent } from './pages/users-list/users-list.component';
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { UserEditComponent } from './pages/user-edit/user-edit.component';
     MatInputModule,
     MatSortModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
   ]
 })
 export class UsersModule { }

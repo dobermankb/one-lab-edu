@@ -6,8 +6,11 @@ import { Router } from '@angular/router';
 
 import { ProductModel } from '@core/model/product.model';
 import { ProductService } from '@core/service/product.service';
+import { UserModel } from '@core/model/user.model';
+import { UserService } from '@core/service/user.service';
 
 interface ProductsListState {
+  user?: UserModel | null;
   products: ProductModel[];
   isLoading: boolean;
   errorMsg?: string | null;
@@ -15,13 +18,17 @@ interface ProductsListState {
 
 @Injectable()
 export class ProductsListComponentStoreService extends ComponentStore<ProductsListState> {
-  constructor(private productService: ProductService, private router: Router) {
+  constructor(private productService: ProductService,
+              private userService: UserService,
+              private router: Router) {
     super({
+      user: null,
       products: [],
       errorMsg: null,
       isLoading: false
     });
   }
+  readonly user$: Observable<UserModel | null | undefined> = this.select(state => state.user);
   readonly products$: Observable<ProductModel[]> = this.select(state => state.products);
   readonly isLoading$: Observable<boolean> = this.select(state => state.isLoading);
   readonly errorMsg$: Observable<string | null | undefined> = this.select(state => state.errorMsg);
@@ -45,6 +52,38 @@ export class ProductsListComponentStoreService extends ComponentStore<ProductsLi
       ...state,
       products
     };
+  });
+
+  readonly updateUser = this.updater((state: ProductsListState, user: UserModel | null | undefined) => {
+    return {
+      ...state,
+      user
+    };
+  });
+
+  readonly loadUser = this.effect((userUid$: Observable<string>) => {
+    return userUid$.pipe(
+      switchMap((userUid: string) => {
+        this.setLoading(true);
+        return this.userService.getUser$(userUid).pipe(
+          tapResponse(
+            user => {
+              this.setLoading(false);
+              this.updateError(null);
+              this.updateUser(user);
+            },
+            (error) => {
+              this.updateError(String(error));
+              this.setLoading(false);
+            }
+          ),
+          catchError(() => {
+            this.setLoading(false);
+            return of(null);
+          })
+        );
+      })
+    );
   });
 
   readonly loadProductsOfUser = this.effect((userUid$: Observable<string>) => {

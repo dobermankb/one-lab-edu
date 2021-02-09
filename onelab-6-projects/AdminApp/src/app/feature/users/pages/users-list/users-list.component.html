@@ -74,6 +74,7 @@
         <button mat-mini-fab
                 color="primary"
                 (click)="onEdit(element)"
+                matTooltip="Edit user"
                 aria-label="Edit user">
           <mat-icon>edit</mat-icon>
         </button>
@@ -81,6 +82,7 @@
         <button mat-mini-fab
                 color="{{ element.status ? 'success' : 'warn'}}"
                 (click)="statusToggle(element)"
+                matTooltip="User toggle status"
                 aria-label="User toggle status">
           <mat-icon matSuffix>{{ element.status ? 'person' : 'person_off' }}</mat-icon>
         </button>

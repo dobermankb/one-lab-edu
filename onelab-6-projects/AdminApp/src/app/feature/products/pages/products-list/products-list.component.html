@@ -1,5 +1,7 @@
 <div class="container">
-  <h2 class="list__title text-center">The list of all products of {{ uidToEdit ? uidToEdit : sessionUserUid }}</h2>
+  <h2 class="list__title text-center">
+    Shop: <span class="list__subtitle">{{ (user$ | async)?.shopName || '' }}</span>
+  </h2>
   <hr>
   <div class="upper__container">
     <div class="filter">
@@ -39,7 +41,7 @@
     <!-- Image Column -->
     <ng-container matColumnDef="category">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-      <td mat-cell *matCellDef="let element"> {{element.categoryNames}} </td>
+      <td mat-cell *matCellDef="let element" matTooltip="{{ element.categoryNames }}"> {{element.categoryNames}} </td>
     </ng-container>
 
     <!-- Price Column -->
@@ -63,12 +65,14 @@
         <button mat-mini-fab
                 color="primary"
                 (click)="onEdit(element)"
+                matTooltip="Edit product"
                 aria-label="Edit product">
           <mat-icon>edit</mat-icon>
         </button>
         <button mat-mini-fab
                 color="warn"
                 (click)="onDelete(element)"
+                matTooltip="Delete product"
                 aria-label="Delete product">
           <mat-icon>delete</mat-icon>
         </button>

@@ -18,8 +18,14 @@
   padding: 15px;
 }
 
-.list__title {
-  font-weight: bold;
+.list {
+  &__title {
+    font-weight: bold;
+  }
+  &__subtitle {
+    font-weight: normal;
+    color: darkblue;
+  }
 }
 
 .text-center {

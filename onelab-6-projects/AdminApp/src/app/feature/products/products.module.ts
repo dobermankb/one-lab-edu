@@ -16,6 +16,7 @@ import { MatOptionModule } from '@angular/material/core';
 
 import { ProductsListComponent } from './pages/products-list/products-list.component';
 import { ProductEditComponent } from './pages/product-edit/product-edit.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { ProductEditComponent } from './pages/product-edit/product-edit.componen
     MatInputModule,
     MatSortModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
   ]
 })
 export class ProductsModule { }
