@@ -4,7 +4,6 @@ export interface Product {
   type: string;
   feature: string[];
   brand: string;
-  color: string[];
   image: string[];
   price: number;
 }
