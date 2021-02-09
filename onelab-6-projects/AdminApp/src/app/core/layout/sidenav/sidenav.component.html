@@ -11,7 +11,7 @@
          [routerLink]="[list_item.path]"
          [routerLinkActiveOptions]="{ exact: list_item.exactPath }"
          routerLinkActive="sidenav__link--active"
-         *ngIf="list_item.accessRoles.includes((sessionUser$ | async)?.role || '')">
+         *appAccessRoles="list_item.accessRoles">
         <mat-icon matPrefix>{{ list_item.icon }}</mat-icon>
         <span> {{ list_item.displayName }} </span>
         <mat-icon matSuffix>arrow_right</mat-icon>

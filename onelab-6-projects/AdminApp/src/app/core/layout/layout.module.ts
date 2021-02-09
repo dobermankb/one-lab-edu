@@ -10,12 +10,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AccessRolesDirective } from '@shared/directive/access-roles.directive';
 
 @NgModule({
   declarations: [
     MainLayoutComponent,
     HeaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    AccessRolesDirective
   ],
   imports: [
     CommonModule,
