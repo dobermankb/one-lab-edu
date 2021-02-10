@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, makeStyles } from "@material-ui/core";
 
 import Footer from "./Footer/Footer";
-import HomeLayout from '../Home/HomeLayout'
+import BannerLayout from '../Home/BannerLayout'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -14,11 +14,9 @@ const useStyles = makeStyles((theme) => ({
     },
     header: {
         height: 150,
-        border: '1px solid green',
     },
     content: {
         height: 500,
-        border: '1px solid yellow',
     },
 }));
 
@@ -26,8 +24,8 @@ const MainLayout = () => {
     const classes = useStyles();
 
     return <Box className={classes.root}>
-        <Box className={classes.header}>Header</Box>
-        <Box className={classes.content}><HomeLayout></HomeLayout></Box>
+        <Box className={classes.header}></Box>
+        <Box className={classes.content}><BannerLayout></BannerLayout></Box>
         <Footer />
     </Box>;
 };
