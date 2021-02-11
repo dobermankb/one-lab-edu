@@ -4,6 +4,7 @@ import { NotFoundPageComponent } from '@core/static/notfound-page/notfound-page.
 import { MainGuard } from '@core/guard/main.guard';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { MainLayoutComponent } from '@core/layout/main-layout/main-layout.component';
+import { ListComponent } from './banners/list/list.component';
 
 const redirectLoggedInToMain = () => redirectLoggedInTo(['main']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
@@ -13,6 +14,11 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'main'
+  },
+  {
+    path:'banners',
+    component:ListComponent,
+    loadChildren: () => import('./banners/banners.module').then(m => m.BannersModule)
   },
   {
     path: 'main',
