@@ -5,6 +5,7 @@ import { MainGuard } from '@core/guard/main.guard';
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
 import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 import { ProductsListComponent } from './pages/products-list/products-list.component';
+import { CategoriesComponent } from 'src/app/categoriesss/categories/categories.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,13 @@ const routes: Routes = [
         },
         component: ProductsListComponent
       },
+      {
+        path: 'categories',
+        data: {
+          accessRoles: ['admin']
+        },
+        component:CategoriesComponent
+      }
     ]
   }
 ];
