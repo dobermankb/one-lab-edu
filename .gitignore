@@ -1,5 +1,4 @@
-/Portal/node_modules/
-/Portal/node_modules/
+node_modules/
 
 # intellij configs
 .idea/

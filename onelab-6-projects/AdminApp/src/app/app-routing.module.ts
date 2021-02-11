@@ -5,6 +5,7 @@ import { MainGuard } from '@core/guard/main.guard';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { MainLayoutComponent } from '@core/layout/main-layout/main-layout.component';
 import { CategoriesComponent } from './categoriesss/categories/categories.component';
+import { ListComponent } from './banners/list/list.component';
 
 const redirectLoggedInToProducts = () => redirectLoggedInTo(['products']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
@@ -60,6 +61,11 @@ const routes: Routes = [
         component: CategoriesComponent
       }
     ]
+  },
+  {
+    path: 'banners',
+    component: MainLayoutComponent,
+    loadChildren: () => import('./banners/banners.module').then(m => m.BannersModule)
   },
   {
     path: '**',

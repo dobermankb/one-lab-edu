@@ -39,7 +39,14 @@ export class SidenavComponent implements OnInit {
       exactPath: true,
       accessRoles: ['admin'],
       icon: 'vertical_split'
-    }
+    },
+    {
+      path: '/banners',
+      displayName: 'Banners',
+      exactPath: true,
+      accessRoles: ['admin'],
+      icon: 'image'
+    },
   ] as NavigationRoute[];
 
   sessionUser$ = this.storeSessionUser.select(selectSessionUser);
