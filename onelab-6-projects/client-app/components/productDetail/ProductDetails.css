@@ -1,0 +1,219 @@
+.product-bar {
+    border-bottom: 1px solid black;
+    margin: 0 1rem 1rem 1rem;
+  }
+  
+  .product-bar button {
+    border: none;
+    background: none;
+    padding: 1rem;
+  }
+  
+  .product-bar button:hover {
+    text-decoration: underline;
+  }
+  
+  .product-details {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  
+  @media (max-width: 600px) {
+    .product-details {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+    }
+  }
+  
+  .product-banner {
+    width: 50%;
+    margin: 2rem;
+  }
+  
+  .product-banner .banner-image {
+    position: relative;
+  }
+  
+  .product-banner .banner-image img {
+    display: block;
+    -o-object-fit: cover;
+       object-fit: cover;
+    width: 100%;
+    height: 400px;
+  }
+  
+  .product-banner .banner-image .banner-arrow {
+    position: absolute;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    font-size: 2em;
+  }
+  
+  .product-banner .banner-image .banner-arrow .banner-arrow-left {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    padding: 2rem;
+    color: lightgrey;
+  }
+  
+  .product-banner .banner-image .banner-arrow .banner-arrow-left:hover {
+    background: lightgrey;
+    opacity: 0.5;
+    color: black;
+  }
+  
+  .product-banner .banner-image .banner-arrow .banner-arrow-right {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    padding: 2rem;
+    color: lightgrey;
+  }
+  
+  .product-banner .banner-image .banner-arrow .banner-arrow-right:hover {
+    background: lightgrey;
+    opacity: 0.5;
+    color: black;
+  }
+  
+  @media (max-width: 600px) {
+    .product-banner {
+      width: 100%;
+      margin: 0;
+    }
+    .product-banner .banner-image {
+      margin: 2rem;
+    }
+  }
+  
+  .banner-image-container {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    margin: 2rem;
+  }
+  
+  .banner-image-container .banner-image-selector {
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+  }
+  
+  .product-info {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    margin: 0 2rem;
+  }
+  
+  .product-info h1 {
+    padding: 1rem 0;
+    border-bottom: 1px solid lightgrey;
+  }
+  
+  .product-info h2 {
+    margin: 1rem 0;
+    font-size: 1.5em;
+  }
+  
+  .product-info h3 {
+    margin: 1rem 0;
+    font-size: 1em;
+  }
+  
+  .product-info .product-features {
+    margin: 1rem 0;
+  }
+  
+  .product-info .product-features li {
+    list-style-position: inside;
+    margin: 1rem 0;
+  }
+  
+  .product-info .product-description {
+    margin: 1rem 0;
+  }
+  
+  .color-selector p {
+    margin: 1rem 0;
+  }
+  
+  .color-selector span {
+    content: "";
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 1rem;
+    border: 2px solid grey;
+  }
+  
+  .color-selector span:hover {
+    border: 2px solid black;
+  }
+  
+  .product-qty {
+    margin: 2rem 0;
+  }
+  
+  .product-add {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 1rem 0;
+  }
+  
+  .product-add .cart-add-button {
+    width: 50%;
+    background: lightblue;
+    border: none;
+  }
+  
+  .product-add .cart-add-button:hover {
+    background: dodgerblue;
+  }
+  
+  .product-add .product-count {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-right: 5rem;
+  }
+  
+  .product-add .product-count button {
+    padding: 1rem 1.5rem;
+    background: lightgrey;
+    border: none;
+  }
+  
+  .product-add .product-count button:hover {
+    background: silver;
+  }
+  
+  .product-add .product-count input {
+    width: 5rem;
+    text-align: center;
+    border: 1px solid lightgrey;
+  }
+  

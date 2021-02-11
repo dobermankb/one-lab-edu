@@ -1,12 +1,12 @@
 import react from "react";
-import { ProductPartner } from "../data/interfaces";
 
 interface Props {
-  list: string[];
+  userUid: string;
 }
 
-const ProductPartnerList = ({ list }: Props) => {
+const ProductPartnerList = ({ userUid }: Props) => {
   return (
+    
     <div className="product-partner">
         
     </div>
