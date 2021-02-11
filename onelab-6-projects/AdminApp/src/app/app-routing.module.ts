@@ -4,6 +4,7 @@ import { NotFoundPageComponent } from '@core/static/notfound-page/notfound-page.
 import { MainGuard } from '@core/guard/main.guard';
 import { AngularFireAuthGuard, redirectLoggedInTo, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { MainLayoutComponent } from '@core/layout/main-layout/main-layout.component';
+import { CategoriesComponent } from './categoriesss/categories/categories.component';
 
 const redirectLoggedInToProducts = () => redirectLoggedInTo(['products']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['auth']);
@@ -45,6 +46,20 @@ const routes: Routes = [
       accessRoles: null
     },
     loadChildren: () => import('./feature/auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: 'categories',
+    component: MainLayoutComponent,
+    data: {
+      authGuardPipe: redirectLoggedInToProducts,
+      accessRoles: ['admin']
+    },
+    children: [
+      {
+        path: '',
+        component: CategoriesComponent
+      }
+    ]
   },
   {
     path: '**',

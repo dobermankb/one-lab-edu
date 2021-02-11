@@ -32,6 +32,13 @@ export class SidenavComponent implements OnInit {
       exactPath: true,
       accessRoles: ['admin'],
       icon: 'supervisor_account'
+    },
+    {
+      path: '/categories',
+      displayName: 'Categories',
+      exactPath: true,
+      accessRoles: ['admin'],
+      icon: 'vertical_split'
     }
   ] as NavigationRoute[];
 
