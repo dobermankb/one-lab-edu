@@ -21,7 +21,7 @@
   &__container {
     padding: 15px;
   }
-  &__inputfield:nth-child(2n), &__selectfield:nth-child(2n) {
+  &__inputfield, &__selectfield {
     margin-right: 5px;
   }
 

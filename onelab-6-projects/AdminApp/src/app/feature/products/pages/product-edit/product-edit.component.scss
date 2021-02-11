@@ -24,6 +24,7 @@
   &__selectfield {
     min-width: 10%;
     max-width: 20%;
+    margin-right: 5px;
   }
   &__inputfield {
     margin-right: 5px;
@@ -31,6 +32,11 @@
   }
   &__textareafield {
     width: calc(50% - 5px);
+  }
+  &__auxbutton {
+    width: 10%;
+    height: auto;
+    margin-right: 5px;
   }
   &__button {
     display: block;

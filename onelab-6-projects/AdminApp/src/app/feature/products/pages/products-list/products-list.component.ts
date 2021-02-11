@@ -42,6 +42,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     'category',
     'price',
     'description',
+    'status',
     'actions'
   ];
   dataSource = new MatTableDataSource<ProductModel>([]);

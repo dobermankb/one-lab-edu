@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ProductModel } from '@core/model/product.model';
@@ -10,10 +10,14 @@ import { ProductInternalModel } from '@core/model/product_internal.model';
 })
 export class ProductService {
 
+  private readonly apiUrl = 'products';
+
   constructor(private firebaseFirestore: AngularFirestore) { }
 
   getAllProducts(): Observable<ProductModel[]> {
-    return this.firebaseFirestore.collection<ProductModel>(`products`).valueChanges()
+    return this.firebaseFirestore
+      .collection<ProductModel>(`${this.apiUrl}`)
+      .valueChanges()
       .pipe(
         take(1),
         catchError(error => {
@@ -23,14 +27,19 @@ export class ProductService {
   }
 
   getAllProductsOfUser$(userUid: string): Observable<ProductModel[]> {
-    return this.firebaseFirestore.collection<ProductModel>('products',
-        ref => ref.where('userUid', '==', userUid)).valueChanges().pipe(
-      take(1),
-      catchError(error => of([] as ProductModel[]))
-    );
+    return this.firebaseFirestore
+      .collection<ProductModel>(`${this.apiUrl}`,
+        ref => ref.where('userUid', '==', userUid))
+      .valueChanges()
+      .pipe(
+        take(1),
+        catchError(error => of([] as ProductModel[]))
+      );
   }
 
-  getProduct$ = (uid: string) => this.firebaseFirestore.doc<ProductModel>(`products/${uid}`).valueChanges()
+  getProduct$ = (uid: string) => this.firebaseFirestore
+    .doc<ProductModel>(`${this.apiUrl}/${uid}`)
+    .valueChanges()
     .pipe(
       take(1),
       catchError(error => {
@@ -39,13 +48,19 @@ export class ProductService {
     )
 
   setProduct = (productModel: ProductModel) =>
-    this.firebaseFirestore.doc<ProductModel>(`products/${productModel.uid}`).set(productModel)
+    this.firebaseFirestore
+      .doc<ProductModel>(`${this.apiUrl}/${productModel.uid}`)
+      .set(productModel)
 
   addProduct = (productModel: ProductModel) =>
-    this.firebaseFirestore.collection<ProductModel>(`products`).add(productModel)
+    this.firebaseFirestore
+      .collection<ProductModel>(`${this.apiUrl}`)
+      .add(productModel)
       .then(docRef => {
         return this.setProduct({ ...productModel, uid: docRef.id });
       })
   deleteProduct = (productModel: ProductModel) =>
-    this.firebaseFirestore.doc<ProductModel>(`products/${productModel.uid}`).delete()
+    this.firebaseFirestore
+      .doc<ProductModel>(`${this.apiUrl}/${productModel.uid}`)
+      .delete()
 }

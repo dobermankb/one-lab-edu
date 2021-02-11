@@ -1,3 +1,5 @@
+import { DeliveryOptionsModel } from '@core/model/delivery-options.model';
+
 export interface UserModel {
   uid: string;
   role: string;
@@ -6,6 +8,7 @@ export interface UserModel {
   username: string;
   phoneNumber: string;
   shopName: string;
+  deliveryOptions: DeliveryOptionsModel;
 }
 
 

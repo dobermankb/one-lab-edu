@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ProductsRoutingModule } from './products-routing.module';
+import { DashboardTableComponent } from '@shared/component/dashboard-table/dashboard-table.component';
+import { AccessRolesDirective } from '@shared/directive/access-roles.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -13,24 +12,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-
-import { ProductsListComponent } from './pages/products-list/products-list.component';
-import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
 
 @NgModule({
   declarations: [
-    ProductsListComponent,
-    ProductEditComponent,
+    DashboardTableComponent,
+    AccessRolesDirective
   ],
   imports: [
     CommonModule,
-    ProductsRoutingModule,
-
     FormsModule,
     ReactiveFormsModule,
+
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
@@ -40,8 +33,14 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSortModule,
     MatSelectModule,
     MatOptionModule,
-    MatTooltipModule,
-    MatAutocompleteModule
+    MatTooltipModule
+  ],
+  exports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DashboardTableComponent,
+    AccessRolesDirective
   ]
 })
-export class ProductsModule { }
+export class SharedModule {}

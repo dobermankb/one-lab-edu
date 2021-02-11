@@ -9,13 +9,17 @@ import { SessionUserModel } from '@core/model/session-user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+  private readonly apiUrl = 'users';
+
   constructor(private firebaseAuth: AngularFireAuth,
               private firebaseFirestore: AngularFirestore) {}
   sessionUser$ = this.firebaseAuth.user
       .pipe(
         switchMap(user => {
           if (user) {
-            return this.firebaseFirestore.doc<UserModel>(`users/${user.uid}`).valueChanges()
+            return this.firebaseFirestore
+              .doc<UserModel>(`${this.apiUrl}/${user.uid}`)
+              .valueChanges()
               .pipe(
                 take(1),
                 map(dbUser => {

@@ -83,6 +83,34 @@
         <span *ngIf="role?.errors?.required">This field is mandatory. </span>
       </mat-error>
     </mat-form-field>
+    <br>
+    <div formGroupName="deliveryOptions">
+      <mat-form-field class="editform__selectfield mat-form-field" appearance="outline">
+        <mat-label>Pickup</mat-label>
+        <mat-select
+          formControlName="pickup"
+          autocomplete="off">
+          <mat-option [value]="true">Available</mat-option>
+          <mat-option [value]="false">Unavailable</mat-option>
+        </mat-select>
+        <mat-error *ngIf="deliveryOptionsPickup?.touched && deliveryOptionsPickup?.invalid">
+          <span *ngIf="deliveryOptionsPickup?.errors?.required">This field is mandatory. </span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="deliveryOptionsDelivery" class="editform__selectfield mat-form-field" appearance="outline">
+        <mat-label>Delivery</mat-label>
+        <mat-select
+          formControlName="delivery"
+          autocomplete="off">
+          <mat-option [value]="true">Available</mat-option>
+          <mat-option [value]="false">Unavailable</mat-option>
+        </mat-select>
+        <mat-error *ngIf="deliveryOptionsDelivery?.touched && deliveryOptionsDelivery?.invalid">
+          <span *ngIf="deliveryOptionsDelivery?.errors?.required">This field is mandatory. </span>
+        </mat-error>
+      </mat-form-field>
+
+    </div>
 
     <button class="editform__button"
             mat-raised-button

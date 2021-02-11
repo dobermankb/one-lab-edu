@@ -8,6 +8,8 @@ import { ProductModel } from '@core/model/product.model';
 import { ProductService } from '@core/service/product.service';
 import { UserModel } from '@core/model/user.model';
 import { UserService } from '@core/service/user.service';
+import { ProductInternalModel } from '@core/model/product_internal.model';
+import { ProductInternalService } from '@core/service/product-internal.service';
 
 interface ProductsListState {
   user?: UserModel | null;
@@ -19,6 +21,7 @@ interface ProductsListState {
 @Injectable()
 export class ProductsListComponentStoreService extends ComponentStore<ProductsListState> {
   constructor(private productService: ProductService,
+              private productInternalService: ProductInternalService,
               private userService: UserService,
               private router: Router) {
     super({

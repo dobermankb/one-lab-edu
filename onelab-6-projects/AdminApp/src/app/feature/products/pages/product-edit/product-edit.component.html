@@ -14,46 +14,70 @@
   <form class="form-group" [formGroup]="productEditForm" (ngSubmit)="onSubmit()">
     <h2>Edit product</h2>
 
-    <mat-form-field class="addform__selectfield mat-form-field" appearance="outline">
+    <mat-form-field *ngIf="categoryName" class="editform__inputfield mat-form-field" appearance="outline">
       <mat-label>Category</mat-label>
-      <mat-select color="primary" formControlName="categoryNames" required multiple>
-        <mat-option *ngFor="let category of (categories$ | async)" [value]="category.name">{{ category.name }}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="categoryNames?.touched && categoryNames?.invalid">
-        <span *ngIf="categoryNames?.errors?.required">This field is mandatory. </span>
+      <input type="text"
+             placeholder="Category"
+             matInput
+             formControlName="categoryName">
+      <mat-error *ngIf="categoryName?.touched && categoryName?.invalid">
+        <span *ngIf="categoryName?.errors?.required">This field is mandatory. </span>
       </mat-error>
     </mat-form-field>
-    <br>
-
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
+    <mat-form-field *ngIf="name" class="editform__inputfield mat-form-field" appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" autocomplete="off">
       <mat-error *ngIf="name?.touched && name?.invalid">
-        <span *ngIf="name?.errors?.maxlength">This name is too long. </span>
         <span *ngIf="name?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="name?.errors?.maxlength">This name is too long. </span>
       </mat-error>
     </mat-form-field>
-
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
-      <mat-label>Price</mat-label>
+    <br>
+    <mat-form-field *ngIf="parametersHeight" class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Height</mat-label>
       <input matInput
-             formControlName="price"
+             formControlName="parametersHeight"
              autocomplete="off">
-      <mat-error *ngIf="price?.touched && price?.invalid">
-        <span *ngIf="price?.errors?.pattern">This price is invalid </span>
-        <span *ngIf="price?.errors?.required">This field is mandatory. </span>
+      <mat-error *ngIf="parametersHeight?.touched && parametersHeight?.invalid">
+        <span *ngIf="parametersHeight?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="parametersHeight?.errors?.pattern">This height is invalid </span>
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__inputfield mat-form-field" appearance="outline">
-      <mat-label>imageUrl</mat-label>
-      <input matInput formControlName="imageUrl" autocomplete="off">
-      <mat-error *ngIf="imageUrl?.touched && imageUrl?.invalid">
-        <span *ngIf="imageUrl?.errors?.required">This field is mandatory. </span>
+    <mat-form-field *ngIf="parametersWidth" class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Width</mat-label>
+      <input matInput
+             formControlName="parametersWidth"
+             autocomplete="off">
+      <mat-error *ngIf="parametersWidth?.touched && parametersWidth?.invalid">
+        <span *ngIf="parametersWidth?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="parametersWidth?.errors?.pattern">This width is invalid </span>
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__textareafield mat-form-field" appearance="outline">
+    <mat-form-field *ngIf="parametersLength" class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Length</mat-label>
+      <input matInput
+             formControlName="parametersLength"
+             autocomplete="off">
+      <mat-error *ngIf="parametersLength?.touched && parametersLength?.invalid">
+        <span *ngIf="parametersLength?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="parametersLength?.errors?.pattern">This length is invalid </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="parametersWeight" class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Weight</mat-label>
+      <input matInput
+             formControlName="parametersWeight"
+             autocomplete="off">
+      <mat-error *ngIf="parametersWeight?.touched && parametersWeight?.invalid">
+        <span *ngIf="parametersWeight?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="parametersWeight?.errors?.pattern">This weight is invalid </span>
+      </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field *ngIf="description" class="editform__textareafield mat-form-field" appearance="outline">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" autocomplete="off"></textarea>
       <mat-error *ngIf="description?.touched && description?.invalid">
@@ -61,7 +85,47 @@
         <span *ngIf="description?.errors?.required">This field is mandatory. </span>
       </mat-error>
     </mat-form-field>
+    <br>
 
+    <mat-form-field *ngIf="price" class="editform__inputfield mat-form-field" appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput
+             formControlName="price"
+             autocomplete="off">
+      <mat-error *ngIf="price?.touched && price?.invalid">
+        <span *ngIf="price?.errors?.required">This field is mandatory. </span>
+        <span *ngIf="price?.errors?.pattern">This price is invalid </span>
+      </mat-error>
+    </mat-form-field>
+    <br>
+
+    <mat-form-field *ngIf="deliveryOptionsPickup" class="editform__selectfield mat-form-field" appearance="outline">
+      <mat-label>Pickup</mat-label>
+      <mat-select
+        formControlName="deliveryOptionsPickup"
+        autocomplete="off">
+        <mat-option [value]="true">Available</mat-option>
+        <mat-option [value]="false">Unavailable</mat-option>
+      </mat-select>
+      <mat-error *ngIf="deliveryOptionsPickup?.touched && deliveryOptionsPickup?.invalid">
+        <span *ngIf="deliveryOptionsPickup?.errors?.required">This field is mandatory. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="deliveryOptionsDelivery" class="editform__selectfield mat-form-field" appearance="outline">
+      <mat-label>Delivery</mat-label>
+      <mat-select
+        formControlName="deliveryOptionsDelivery"
+        autocomplete="off">
+        <mat-option [value]="true">Available</mat-option>
+        <mat-option [value]="false">Unavailable</mat-option>
+      </mat-select>
+      <mat-error *ngIf="deliveryOptionsDelivery?.touched && deliveryOptionsDelivery?.invalid">
+        <span *ngIf="deliveryOptionsDelivery?.errors?.required">This field is mandatory. </span>
+      </mat-error>
+    </mat-form-field>
+
+    <br>
     <button class="editform__button"
             mat-raised-button
             color="primary"

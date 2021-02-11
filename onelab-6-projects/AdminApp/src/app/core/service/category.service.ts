@@ -9,12 +9,15 @@ import { CategoryModel } from '@core/model/Category.model';
 })
 export class CategoryService {
 
+  private readonly apiUrl = 'categories';
+
   constructor(private firebaseFirestore: AngularFirestore) { }
 
   getAllLeafCategories(): Observable<CategoryModel[]> {
-    return this.firebaseFirestore.collection<CategoryModel>(`categories`,
-        // ref => ref.orderBy('name').where('level', '==', 3)).valueChanges()
-        ref => ref.where('level', '==', 3)).valueChanges()
+    return this.firebaseFirestore
+      .collection<CategoryModel>(`${this.apiUrl}`,
+        ref => ref.where('level', '==', 3))
+      .valueChanges()
       .pipe(
         map(categories => categories.sort(
           (categoryA, categoryB) => categoryA.name.localeCompare(categoryB.name))),

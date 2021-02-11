@@ -55,6 +55,15 @@ export class UserEditComponent implements OnInit, OnDestroy {
     return this.userEditForm?.get('shopName');
   }
 
+  get deliveryOptionsPickup(): AbstractControl | null | undefined {
+    return this.userEditForm?.get('deliveryOptions')?.get('pickup');
+  }
+
+  get deliveryOptionsDelivery(): AbstractControl | null | undefined {
+    return this.userEditForm?.get('deliveryOptions')?.get('delivery');
+  }
+
+
   ngOnInit(): void {
     this.store.select(getCurrentRouteState).pipe(
       takeUntil(this.destroyService$)
@@ -76,6 +85,10 @@ export class UserEditComponent implements OnInit, OnDestroy {
             status: [user.status, [Validators.required]],
             fullName: [user.fullName, [Validators.maxLength(this.MAX_LENGTH)]],
             username: [user.username, [Validators.maxLength(this.MAX_LENGTH)]],
+            deliveryOptions: this.formBuilder.group({
+              pickup: [user.deliveryOptions.pickup, [Validators.nullValidator]],
+              delivery: [user.deliveryOptions.delivery, [Validators.nullValidator]],
+            }),
             phoneNumber: [user.phoneNumber,
               [Validators.pattern('^([\\s]*)(([+][7])|([8]))([\\s])*([\\d][\\s]*){10}$')]],
             shopName: [user.shopName, [Validators.maxLength(this.MAX_LENGTH)]],

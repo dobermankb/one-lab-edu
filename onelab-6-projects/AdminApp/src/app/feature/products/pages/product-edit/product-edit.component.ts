@@ -9,6 +9,8 @@ import { ProductModel } from '@core/model/product.model';
 import { getCurrentRouteState } from '@core/store/router/router.selector';
 import { RootState } from '@core/store';
 import { RouterStateUrl } from '@core/store/router/router.state';
+import { DeliveryOptionsModel } from '@core/model/delivery-options.model';
+import { ProductParameters } from '@core/model/parameters.model';
 
 @Component({
   selector: 'app-product-edit',
@@ -60,17 +62,33 @@ export class ProductEditComponent implements OnInit, OnDestroy {
           this.productEditForm = this.formBuilder.group(
             {
               uid: [product.uid, [Validators.required]],
+              internalUid: [product.uid, [Validators.required]],
               userUid: [product.userUid, [Validators.required]],
-              categoryNames: [product.categoryNames, [Validators.nullValidator]],
               barcode: [product.barcode, [Validators.required]],
-              name: [product.name, [Validators.required, Validators.maxLength(this.MAX_LENGTH)]],
-              imageUrl: [product.imageUrl, [Validators.nullValidator]],
               price: [product.price, [
                 Validators.required,
                 Validators.pattern('^([\\d]*[,.]?[\\d]*)$')]],
+              categoryName: [product.categoryName, [Validators.nullValidator]],
+              deliveryOptionsPickup: [product.deliveryOptions.pickup, [Validators.required]],
+              deliveryOptionsDelivery: [product.deliveryOptions.delivery, [Validators.required]],
+              parametersHeight: [product.parameters.height, [Validators.required]],
+              parametersWidth: [product.parameters.width, [Validators.required]],
+              parametersLength: [product.parameters.length, [Validators.required]],
+              parametersWeight: [product.parameters.weight, [Validators.required]],
+              status: [product.status, [Validators.required]],
+              name: [product.name, [Validators.required, Validators.maxLength(this.MAX_LENGTH)]],
               description: [product.description, [Validators.required, Validators.maxLength(this.MAX_LENGTH * 4)]],
             }
           );
+          this.barcode?.disable();
+          this.categoryName?.disable();
+          this.status?.disable();
+          this.name?.disable();
+          this.description?.disable();
+          this.parametersHeight?.disable();
+          this.parametersWidth?.disable();
+          this.parametersLength?.disable();
+          this.parametersWeight?.disable();
         }
       }
     );
@@ -78,14 +96,6 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.productEditForm?.reset();
-  }
-
-  get name(): AbstractControl | null | undefined {
-    return this.productEditForm?.get('name');
-  }
-
-  get imageUrl(): AbstractControl | null | undefined {
-    return this.productEditForm?.get('imageUrl');
   }
 
   get price(): AbstractControl | null | undefined {
@@ -96,15 +106,72 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     return this.productEditForm?.get('description');
   }
 
-  get categoryNames(): AbstractControl | null | undefined {
-    return this.productEditForm?.get('categoryNames');
+  get barcode(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('barcode');
+  }
+
+  get categoryName(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('categoryName');
+  }
+
+  get status(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('status');
+  }
+  get parametersHeight(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('parametersHeight');
+  }
+
+  get parametersWidth(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('parametersWidth');
+  }
+
+  get parametersLength(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('parametersLength');
+  }
+
+  get parametersWeight(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('parametersWeight');
+  }
+
+  get deliveryOptionsPickup(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('deliveryOptionsPickup');
+  }
+
+  get deliveryOptionsDelivery(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('deliveryOptionsDelivery');
+  }
+
+  get name(): AbstractControl | null | undefined {
+    return this.productEditForm?.get('name');
   }
 
   onSubmit(): void {
     if (this.productEditForm?.invalid) {
       return;
     }
-    this.productEditStore.setProduct(this.productEditForm?.getRawValue() as ProductModel);
+    const submitProduct = {
+      uid: this.productEditForm?.get('uid')?.value,
+      barcode: this.productEditForm?.get('barcode')?.value,
+      userUid: this.productEditForm?.get('userUid')?.value,
+      internalUid: this.productEditForm?.get('internalUid')?.value,
+      price: this.productEditForm?.get('price')?.value,
+      deliveryOptions: {
+        pickup: this.productEditForm?.get('deliveryOptionsPickup')?.value,
+        delivery: this.productEditForm?.get('deliveryOptionsDelivery')?.value
+      } as DeliveryOptionsModel,
+
+      categoryName: this.productEditForm?.get('categoryName')?.value,
+      description: this.productEditForm?.get('description')?.value,
+      name: this.productEditForm?.get('name')?.value,
+      parameters: {
+        height: this.productEditForm?.get('parametersHeight')?.value,
+        width: this.productEditForm?.get('parametersWidth')?.value,
+        length: this.productEditForm?.get('parametersLength')?.value,
+        weight: this.productEditForm?.get('parametersWeight')?.value
+      } as ProductParameters,
+      status: this.productEditForm?.get('status')?.value,
+    } as ProductModel;
+    this.productEditStore.setProduct(submitProduct);
   }
 
   onNavigateToList(): void {
