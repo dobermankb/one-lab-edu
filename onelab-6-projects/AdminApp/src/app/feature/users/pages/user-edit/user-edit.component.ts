@@ -84,8 +84,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyService$)
     ).subscribe(
       ([userUid, sessionUser]) => {
-        console.log('userUid = ', userUid);
-        console.log('sessionUser = ', sessionUser);
         if (!!userUid) {
           this.userEditStore.loadUser(userUid);
           this.isProfile = false;
