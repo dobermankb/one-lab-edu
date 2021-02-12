@@ -84,6 +84,10 @@ table {
     margin-top: auto;
     margin-bottom: auto;
   }
+  &__option {
+    width: 25%;
+    margin-left: 5px;
+  }
 }
 
 .create__wrapper {

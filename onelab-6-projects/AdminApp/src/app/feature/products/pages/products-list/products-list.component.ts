@@ -109,6 +109,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   dataSource = new MatTableDataSource<ProductModel>([]);
   filterInput = '';
+  filterSelection = {
+    role: ['admin', 'seller'],
+    status: [true, false]
+  };
   uidToEdit?: string;
   sessionUserUid?: string;
   products$ = this.productsListStore.products$;
@@ -120,7 +124,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   applyFilter(): void {
-    this.dataSource.filter = this.filterInput;
+    this.dataSource.filter = JSON.stringify({
+      filterInput: this.filterInput,
+      filterSelection: this.filterSelection
+    });
   }
 
   ngOnInit(): void {
@@ -153,6 +160,16 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     );
 
     this.products$.pipe(takeUntil(this.destroyService$)).subscribe(products => {
+      this.dataSource.filterPredicate = (data: ProductModel, filterVal: string) => {
+        return this.filterSelection.status.includes(data.status)
+          &&
+          (filterVal.length === 0
+            || !!data.name?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.barcode?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.categoryName?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.description?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase())
+            || !!data.price?.toString().trim().toLowerCase().includes(this.filterInput.trim().toLowerCase()));
+      };
       this.dataSource.data = products;
     });
   }
