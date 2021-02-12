@@ -22,6 +22,14 @@ const routes: Routes = [
         component: UsersListComponent
       },
       {
+        path: 'edit',
+        canActivate: [MainGuard],
+        data: {
+          accessRoles: ['admin', 'seller']
+        },
+        component: UserEditComponent
+      },
+      {
         path: 'edit/:userUid',
         canActivate: [MainGuard],
         data: {

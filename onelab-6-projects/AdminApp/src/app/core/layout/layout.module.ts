@@ -11,16 +11,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AccessRolesDirective } from '@shared/directive/access-roles.directive';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
     MainLayoutComponent,
     HeaderComponent,
-    SidenavComponent,
-    AccessRolesDirective
+    SidenavComponent
   ],
   imports: [
     CommonModule,
+    SharedModule,
     MatSidenavModule,
     MatButtonModule,
     MatListModule,

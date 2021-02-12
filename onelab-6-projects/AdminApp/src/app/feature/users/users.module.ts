@@ -24,14 +24,12 @@ import { SharedModule } from '@shared/shared.module';
 @NgModule({
   declarations: [
     UsersListComponent,
-    UserEditComponent,
+    UserEditComponent
   ],
   imports: [
     CommonModule,
     UsersRoutingModule,
-
     SharedModule,
-
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,

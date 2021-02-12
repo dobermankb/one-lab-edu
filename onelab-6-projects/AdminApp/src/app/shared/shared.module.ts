@@ -16,7 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
-    DashboardTableComponent
+    DashboardTableComponent,
+    AccessRolesDirective
   ],
   imports: [
     CommonModule,
@@ -39,6 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FormsModule,
     ReactiveFormsModule,
     DashboardTableComponent,
+    AccessRolesDirective
   ]
 })
 export class SharedModule {}

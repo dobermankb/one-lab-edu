@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserModel } from '@core/model/user.model';
@@ -9,6 +9,8 @@ import { Store } from '@ngrx/store';
 import { RootState } from '@core/store';
 import { getCurrentRouteState } from '@core/store/router/router.selector';
 import { RouterStateUrl } from '@core/store/router/router.state';
+import { selectSessionUser } from '@core/store/session-user/session-user.selector';
+import { SessionUserState } from '@core/store/session-user/session-user.state';
 
 @Component({
   selector: 'app-user-edit',
@@ -26,6 +28,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   successMsg$ = this.userEditStore.successMsg$;
 
   constructor(private store: Store<RootState>,
+              private sessionUserStore: Store<SessionUserState>,
               private userEditStore: UserEditComponentStoreService,
               private formBuilder: FormBuilder,
               private destroyService$: DestroyService) {
@@ -66,13 +69,24 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.select(getCurrentRouteState).pipe(
+      map(routeStateUnknown => {
+        const routeState = routeStateUnknown as unknown as RouterStateUrl;
+        const { userUid } = routeState.params;
+        return userUid as string | undefined;
+      }),
+      withLatestFrom(
+        this.sessionUserStore.select(selectSessionUser).pipe(
+          filter(sessionUser => !!sessionUser),
+          take(1)
+        )
+      ),
       takeUntil(this.destroyService$)
     ).subscribe(
-      (routeStateUnknown: unknown) => {
-        const routeState = routeStateUnknown as RouterStateUrl;
-        const { userUid } = routeState.params;
+      ([userUid, sessionUser]) => {
         if (!!userUid) {
           this.userEditStore.loadUser(userUid);
+        } else if (!!sessionUser) {
+          this.userEditStore.loadUser(sessionUser.uid);
         }
       }
     );

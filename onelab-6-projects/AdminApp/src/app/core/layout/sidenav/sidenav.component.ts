@@ -20,6 +20,13 @@ export class SidenavComponent implements OnInit {
 
   navigationRoutes = [
     {
+      path: '/users/edit',
+      displayName: 'My profile',
+      exactPath: true,
+      accessRoles: ['seller', 'admin'],
+      icon: 'account_box'
+    },
+    {
       path: '/products/list',
       displayName: 'My products',
       exactPath: true,
