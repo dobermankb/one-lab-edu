@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { UserModel } from '@core/model/user.model';
@@ -17,32 +15,93 @@ import { DestroyService } from '@shared/service/destroy.service';
 })
 export class UsersListComponent implements OnInit, OnDestroy {
   readonly pageSize = 10;
-  readonly pageOptions = [10, 20, 50];
-  @ViewChild(MatSort) sort?: MatSort;
-  @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.setDataSourceAttributes();
-  }
-  @ViewChild(MatPaginator) paginator?: MatPaginator;
-  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
-    this.setDataSourceAttributes();
-  }
+  readonly pageSizeOptions = [10, 20, 50];
+
+  readonly displayedColumns = [
+    {
+      name: 'fullName',
+      displayName: 'Full name',
+      sortable: true,
+    },
+    {
+      name: 'username',
+      displayName: 'Username',
+      sortable: true,
+    },
+    {
+      name: 'phoneNumber',
+      displayName: 'Phone number',
+      sortable: true,
+    },
+    {
+      name: 'shopName',
+      displayName: 'Shop name',
+      sortable: true,
+    },
+    {
+      name: 'role',
+      displayName: 'Role',
+      sortable: true,
+    },
+    {
+      name: 'status',
+      displayName: 'Status',
+      sortable: true,
+      configBoolean: {
+        display: {
+          onTrue: 'Active',
+          onFalse: 'Inactive'
+        }
+      }
+    },
+    {
+      name: 'actions',
+      displayName: 'Actions',
+      sortable: false,
+      configAction: {
+        actions: [
+          {
+            name: 'editAction',
+            conditionBaseKey: '',
+            tooltip: {
+              onTrue: 'Edit user',
+              onFalse: 'Edit user'
+            },
+            icon: {
+              onTrue: 'edit',
+              onFalse: 'edit',
+            },
+            color: {
+              onTrue: 'primary',
+              onFalse: 'primary'
+            }
+          },
+          {
+            name: 'toggleAction',
+            conditionBaseKey: 'status',
+            tooltip: {
+              onTrue: 'Toggle status',
+              onFalse: 'Toggle status',
+            },
+            icon: {
+              onTrue: 'person',
+              onFalse: 'person_off',
+            },
+            color: {
+              onTrue: 'success',
+              onFalse: 'warn'
+            }
+          },
+        ]
+      }
+    }
+  ];
+
   filterInput = '';
   filterSelection = {
     role: ['admin', 'seller'],
     status: [true, false]
   };
-
-  displayedColumns = [
-    'fullName',
-    'username',
-    'phoneNumber',
-    'shopName',
-    'role',
-    'status',
-    'actions',
-  ];
 
   users$ = this.usersListStore.users$;
 
@@ -69,18 +128,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {}
 
-  statusToggle(element: UserModel): void {
-    element.status = !element.status;
-    this.usersListStore.setUser(element);
-  }
-
-  onEdit(element: UserModel): void {
-    this.usersListStore.goToEditUser(element.uid);
-  }
-
   private setDataSourceAttributes(): void {
-    this.dataSource.paginator = this.paginator ? this.paginator : null;
-    this.dataSource.sort = this.sort ? this.sort : null;
     this.dataSource.filterPredicate = (data: UserModel, filter: string) => {
       return this.filterSelection.role.includes(data.role)
         && this.filterSelection.status.includes(data.status)
@@ -92,11 +140,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
           || !!data.shopName?.trim().toLowerCase().includes(this.filterInput.trim().toLowerCase()));
     };
   }
-  syncPrimaryPaginator(event: PageEvent): void {
-    if (this.paginator) {
-      this.paginator.pageIndex = event.pageIndex;
-      this.paginator.pageSize = event.pageSize;
+
+  tableActionHandler({ element, actionName }: { element: UserModel, actionName: string }): void {
+    if (actionName === 'editAction') {
+      this.usersListStore.goToEditUser(element.uid);
+    } else if (actionName === 'toggleAction') {
+      element.status = !element.status;
+      this.usersListStore.setUser(element);
     }
-    this.paginator?.page.emit(event);
   }
 }

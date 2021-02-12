@@ -3,7 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Column } from '@shared/type/column.type';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-table',
@@ -28,9 +28,9 @@ export class DashboardTableComponent<GenericModel> implements OnInit, OnDestroy 
   @Input() columns: Column<GenericModel>[] = [];
   @Input() pageSize = 0;
   @Input() pageSizeOptions: number[] = [];
-  @Input() dataSource = new MatTableDataSource();
+  @Input() dataSource = new MatTableDataSource<any>();
 
-  @Output() onAction = new EventEmitter();
+  @Output() clickAction = new EventEmitter();
 
   constructor() { }
 

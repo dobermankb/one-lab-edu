@@ -1,34 +1,28 @@
 interface BooleanReplacement {
-  true: string;
-  false: string;
+  onTrue: string;
+  onFalse: string;
 }
 
 interface ConditionalAction {
-  isStandard: boolean;
+  name: string;
+  conditionBaseKey: string;
   tooltip: BooleanReplacement;
   icon: BooleanReplacement;
   color: BooleanReplacement;
 }
 
-interface StandardAction {
-  conditionBaseKey: string;
-  tooltip: string;
-  icon: string;
-  color: string;
-}
-
 interface IsAction {
-  isAction: boolean;
-  actions: (StandardAction | ConditionalAction)[];
+  actions: ConditionalAction[];
 }
 
 interface IsBoolean {
-  isBoolean: boolean;
   display: BooleanReplacement;
 }
 
 export interface Column<GenericModel> {
-  name: keyof GenericModel;
+  name: string;
+  displayName: string;
   sortable?: boolean;
-  config?: IsAction | IsBoolean;
+  configAction?: IsAction;
+  configBoolean?: IsBoolean;
 }

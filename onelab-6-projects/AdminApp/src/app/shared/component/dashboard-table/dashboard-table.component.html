@@ -2,36 +2,24 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <ng-container *ngFor="let column of columns" [matColumnDef]="column.name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortable"> {{ column.name }} </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortable"> {{ column.displayName }} </th>
     <td mat-cell *matCellDef="let element">
-      <ng-container *ngIf="!column.config; else hasConfig">
+      <ng-container *ngIf="!column.configAction && !column.configBoolean; else hasConfig">
         {{ element[column.name] }}
       </ng-container>
       <ng-template #hasConfig>
-        <ng-container *ngIf="column.config.isBoolean">
-          {{ element[column.name] ? column.config.display.true : column.config.display.false }}
+        <ng-container *ngIf="column.configBoolean">
+          {{ element[column.name] ? column.configBoolean.display.onTrue : column.configBoolean.display.onFalse }}
         </ng-container>
-        <ng-container *ngIf="column.config.isAction">
-          <ng-container *ngFor="let action of column.config.actions">
+        <ng-container *ngIf="column.configAction">
+          <ng-container *ngFor="let action of column.configAction.actions">
             <button
-              *ngIf="action.isStandard; else isConditionalAction"
-              (click)="onAction.emit(action)"
-              [matTooltip]="action.tooltip"
-              aria-label="{{ action.tooltip }}"
-              color="{{ action.color }}"
+              (click)="clickAction.emit({ element: element, actionName: action.name })"
+              [matTooltip]="action.conditionBaseKey && element[action.conditionBaseKey] ? action.tooltip.onTrue : action.tooltip.onFalse"
+              color="{{ action.conditionBaseKey && element[action.conditionBaseKey] ? action.color.onTrue : action.color.onFalse }}"
               mat-mini-fab>
-              <mat-icon>{{ action.icon }}</mat-icon>
+              <mat-icon>{{ action.conditionBaseKey && element[action.conditionBaseKey] ? action.icon.onTrue : action.icon.onFalse }}</mat-icon>
             </button>
-            <ng-template #isConditionalAction>
-              <button
-                (click)="onAction.emit(action)"
-                [matTooltip]="action.tooltip"
-                aria-label="{{ action.tooltip }}"
-                color="{{ element[action.conditionBaseKey] ? action.color.true : action.color.false }}"
-                mat-mini-fab>
-                <mat-icon>{{ element[action.conditionBaseKey] ? action.icon.true : action.icon.false }}</mat-icon>
-              </button>
-            </ng-template>
           </ng-container>
         </ng-container>
       </ng-template>

@@ -15,6 +15,7 @@ import { selectSessionUser } from '@core/store/session-user/session-user.selecto
 import { RootState } from '@core/store';
 import { getCurrentRouteState } from '@core/store/router/router.selector';
 import { RouterStateUrl } from '@core/store/router/router.state';
+import { UserModel } from '@core/model/user.model';
 
 @Component({
   selector: 'app-products-list',
@@ -25,26 +26,87 @@ import { RouterStateUrl } from '@core/store/router/router.state';
 export class ProductsListComponent implements OnInit, OnDestroy {
 
   readonly pageSize = 10;
-  readonly pageOptions = [10, 20, 50];
-  @ViewChild(MatSort) sort?: MatSort;
-  @ViewChild(MatSort) set matSort(ms: MatSort) {
-    this.sort = ms;
-    this.setDataSourceAttributes();
-  }
-  @ViewChild(MatPaginator) paginator?: MatPaginator;
-  @ViewChild(MatPaginator) set matPaginator(mp: MatPaginator) {
-    this.paginator = mp;
-    this.setDataSourceAttributes();
-  }
-  displayedColumns = [
-    'name',
-    'barcode',
-    'category',
-    'price',
-    'description',
-    'status',
-    'actions'
+  readonly pageSizeOptions = [10, 20, 50];
+  readonly displayedColumns = [
+    {
+      name: 'name',
+      displayName: 'Name',
+      sortable: true,
+    },
+    {
+      name: 'barcode',
+      displayName: 'Barcode',
+      sortable: true,
+    },
+    {
+      name: 'categoryName',
+      displayName: 'Category name',
+      sortable: true,
+    },
+    {
+      name: 'price',
+      displayName: 'Price',
+      sortable: true,
+    },
+    {
+      name: 'description',
+      displayName: 'Description',
+      sortable: true,
+    },
+    {
+      name: 'status',
+      displayName: 'Status',
+      sortable: true,
+      configBoolean: {
+        display: {
+          onTrue: 'Approved',
+          onFalse: 'Waiting approval'
+        }
+      }
+    },
+    {
+      name: 'actions',
+      displayName: 'Actions',
+      sortable: false,
+      configAction: {
+        actions: [
+          {
+            name: 'editAction',
+            conditionBaseKey: '',
+            tooltip: {
+              onTrue: 'Edit product',
+              onFalse: 'Edit product'
+            },
+            icon: {
+              onTrue: 'edit',
+              onFalse: 'edit',
+            },
+            color: {
+              onTrue: 'primary',
+              onFalse: 'primary'
+            }
+          },
+          {
+            name: 'deleteAction',
+            conditionBaseKey: '',
+            tooltip: {
+              onTrue: 'Delete product',
+              onFalse: 'Delete product',
+            },
+            icon: {
+              onTrue: 'delete',
+              onFalse: 'delete',
+            },
+            color: {
+              onTrue: 'warn',
+              onFalse: 'warn'
+            }
+          },
+        ]
+      }
+    }
   ];
+
   dataSource = new MatTableDataSource<ProductModel>([]);
   filterInput = '';
   uidToEdit?: string;
@@ -91,31 +153,20 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     );
 
     this.products$.pipe(takeUntil(this.destroyService$)).subscribe(products => {
-      this.setDataSourceAttributes();
       this.dataSource.data = products;
     });
   }
 
   ngOnDestroy(): void {}
 
-  private setDataSourceAttributes(): void {
-    this.dataSource.paginator = this.paginator ? this.paginator : null;
-    this.dataSource.sort = this.sort ? this.sort : null;
-  }
-  syncPrimaryPaginator(event: PageEvent): void {
-    if (this.paginator) {
-      this.paginator.pageIndex = event.pageIndex;
-      this.paginator.pageSize = event.pageSize;
+  tableActionHandler({ element, actionName }: { element: ProductModel, actionName: string }): void {
+    if (actionName === 'editAction') {
+      this.productsListStore.goToEditProduct({ productUid: element.uid, userUid: this.uidToEdit });
+    } else if (actionName === 'deleteAction') {
+      this.productsListStore.deleteProduct(element);
     }
-    this.paginator?.page.emit(event);
   }
 
-  onEdit(element: ProductModel): void {
-    this.productsListStore.goToEditProduct({ productUid: element.uid, userUid: this.uidToEdit });
-  }
-  onDelete(element: ProductModel): void {
-    this.productsListStore.deleteProduct(element);
-  }
   onAdd(): void {
     this.productsListStore.goToAddProduct({userUid: this.uidToEdit});
   }

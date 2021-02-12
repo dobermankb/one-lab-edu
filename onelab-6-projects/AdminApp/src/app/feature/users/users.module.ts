@@ -18,6 +18,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { UsersListComponent } from './pages/users-list/users-list.component';
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SharedModule } from '@shared/shared.module';
 
 
 @NgModule({
@@ -28,6 +29,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   imports: [
     CommonModule,
     UsersRoutingModule,
+
+    SharedModule,
 
     FormsModule,
     ReactiveFormsModule,

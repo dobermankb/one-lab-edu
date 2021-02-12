@@ -18,6 +18,7 @@ import { ProductsListComponent } from './pages/products-list/products-list.compo
 import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SharedModule } from '@shared/shared.module';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
   imports: [
     CommonModule,
     ProductsRoutingModule,
+    SharedModule,
 
     FormsModule,
     ReactiveFormsModule,
