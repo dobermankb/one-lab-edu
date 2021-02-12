@@ -62,7 +62,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline">
+    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline" *appAccessRoles="['admin']">
       <mat-label>Status</mat-label>
       <mat-select color="primary" formControlName="status" required>
         <mat-option [value]="false">Inactive</mat-option>
@@ -73,7 +73,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline">
+    <mat-form-field class="editform__selectfield mat-form-field" appearance="outline" *appAccessRoles="['admin']">
       <mat-label>Role</mat-label>
       <mat-select color="primary" formControlName="role" required>
         <mat-option [value]="'admin'">admin</mat-option>
