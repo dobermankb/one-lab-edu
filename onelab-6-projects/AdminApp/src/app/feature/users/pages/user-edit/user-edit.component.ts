@@ -26,6 +26,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   isLoading$ = this.userEditStore.isLoading$;
   errorMsg$ = this.userEditStore.errorMsg$;
   successMsg$ = this.userEditStore.successMsg$;
+  isProfile = false;
 
   constructor(private store: Store<RootState>,
               private sessionUserStore: Store<SessionUserState>,
@@ -83,10 +84,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
       takeUntil(this.destroyService$)
     ).subscribe(
       ([userUid, sessionUser]) => {
+        console.log('userUid = ', userUid);
+        console.log('sessionUser = ', sessionUser);
         if (!!userUid) {
           this.userEditStore.loadUser(userUid);
+          this.isProfile = false;
         } else if (!!sessionUser) {
           this.userEditStore.loadUser(sessionUser.uid);
+          this.isProfile = true;
         }
       }
     );

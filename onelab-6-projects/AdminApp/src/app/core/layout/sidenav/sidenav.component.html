@@ -5,7 +5,7 @@
                [fixedInViewport]="true"
                [fixedTopGap]="64"
                opened>
-    <mat-nav-list class="sidenav_list" *ngFor="let list_item of navigationRoutes">
+    <mat-nav-list class="sidenav__list" *ngFor="let list_item of navigationRoutes">
       <a mat-list-item
          class="sidenav__link"
          [routerLink]="[list_item.path]"

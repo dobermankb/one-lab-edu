@@ -1,11 +1,16 @@
 .sidenav {
   background-color: #e4e4e4;
+  .mat-list-base {
+    padding: 0;
+  }
   &__title {
     text-align: center;
     font-weight: bold;
     padding: 15px 15px 0 15px;
   }
   &__link {
+    border-bottom: 1px solid darkgray;
+    padding: 0;
     &--active {
       color: snow;
       background-color: grey;

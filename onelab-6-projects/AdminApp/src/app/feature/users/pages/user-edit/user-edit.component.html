@@ -1,4 +1,4 @@
-<div class="quick-navigation" *appAccessRoles="['admin']">
+<div class="quick-navigation" *ngIf="!isProfile">
   <button class="quick-navigation__button"
           mat-raised-button
           color="primary"
